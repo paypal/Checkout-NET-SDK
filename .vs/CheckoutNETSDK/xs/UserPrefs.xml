@@ -1,23 +1,68 @@
 ﻿<Properties StartupConfiguration="{1ABBF171-0333-4E55-949A-139CB6FAA33C}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Test/Orders/OrdersCreateTest.cs">
+  <MonoDevelop.Ide.ItemProperties.Test PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.ItemProperties.Samples PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Test/TestHarness.cs">
     <Files>
-      <File FileName="Source/AccessToken.cs" Line="1" Column="1" />
-      <File FileName="Samples/GetOrderSample.cs" Line="36" Column="17" />
-      <File FileName="Samples/AuthorizeIntentExamples/CaptureOrderSample.cs" Line="11" Column="6" />
-      <File FileName="Samples/AuthorizeIntentExamples/AuthorizeOrderSample.cs" Line="40" Column="30" />
-      <File FileName="Source/Payments/AuthorizationsCaptureRequest.cs" Line="20" Column="18" />
-      <File FileName="README.MD" Line="38" Column="2" />
-      <File FileName="Samples/SampleSkeleton.cs" Line="2" Column="1" />
-      <File FileName="Samples/AuthorizeIntentExamples/CreateOrderSample.cs" Line="154" Column="16" />
-      <File FileName="Test/Orders/OrdersCreateTest.cs" Line="40" Column="15" />
+      <File FileName="Test/Orders/OrdersAuthorizeTest.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/OrdersAuthorizeRequest.cs" Line="1" Column="1" />
+      <File FileName="Test/Orders/OrdersCaptureTest.cs" Line="1" Column="1" />
+      <File FileName="Test/Orders/OrdersCreateTest.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/OrdersCreateRequest.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/OrdersGetRequest.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/OrdersCaptureRequest.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/OrderActionRequest.cs" Line="19" Column="22" />
+      <File FileName="PayPalCheckoutSdk/Orders/Customer.cs" Line="1" Column="1" />
+      <File FileName="Test/Orders/OrdersPatchTest.cs" Line="1" Column="1" />
+      <File FileName="Test/Orders/OrdersSaveTest.cs" Line="1" Column="1" />
+      <File FileName="Test/TestHarness.cs" Line="17" Column="70" />
+      <File FileName="Test/Orders/OrdersGetTest.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/AddressDetails.cs" Line="27" Column="64" />
+      <File FileName="Samples/CaptureIntentExamples/CreateOrderSample.cs" Line="1" Column="1" />
+      <File FileName="Samples/AuthorizeIntentExamples/CreateOrderSample.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/ShippingDetails.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/Card.cs" Line="1" Column="1" />
+      <File FileName="Samples/CaptureIntentExamples/RunAllCaptureIntentFlow.cs" Line="1" Column="1" />
+      <File FileName="Samples/AuthorizeIntentExamples/AuthorizeOrderSample.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/AuthorizeRequest.cs" Line="17" Column="34" />
+      <File FileName="PayPalCheckoutSdk/Orders/OrdersPatchRequest.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/OrdersSaveRequest.cs" Line="1" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/OrdersValidateRequest.cs" Line="1" Column="1" />
+      <File FileName="Test/Orders/OrdersVoidTest.cs" Line="1" Column="1" />
+      <File FileName="Test/Orders/OrdersValidateTest.cs" Line="11" Column="1" />
+      <File FileName="PayPalCheckoutSdk/Orders/PurchaseUnit.cs" Line="1" Column="1" />
+      <File FileName="Samples/CaptureIntentExamples/CaptureOrderSample.cs" Line="1" Column="1" />
+      <File FileName="Samples/PayPalClient.cs" Line="10" Column="2" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="CheckoutNETSDK" expanded="True">
+            <Node name="Samples" expanded="True">
+              <Node name="Dependencies" expanded="True">
+                <Node name="ProjectDependencies" expanded="True" />
+                <Node name="SdkDependencies" expanded="True" />
+              </Node>
+              <Node name="AuthorizeIntentExamples" expanded="True" />
+              <Node name="CaptureIntentExamples" expanded="True" />
+            </Node>
+            <Node name="Test" expanded="True">
+              <Node name="Orders" expanded="True" />
+              <Node name="TestHarness.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/pengli/IdeaProjects/Checkout-NET-SDK/Test/Orders/OrdersSaveTest.cs" relfile="Test/Orders/OrdersSaveTest.cs" line="27" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.Samples PreferredExecutionTarget="MonoDevelop.Default" />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.Test PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>

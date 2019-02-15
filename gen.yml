@@ -1,6 +1,6 @@
 ---
-projectName: CheckoutNETSDK
+projectName: PayPalCheckoutSdk
 language: dotnet
-sourcePath: Source
+sourcePath: PayPalCheckoutSdk
 testPath: Test
 apiVersioning: false
