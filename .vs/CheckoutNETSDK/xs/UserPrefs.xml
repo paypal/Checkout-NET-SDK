@@ -60,9 +60,6 @@
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/pengli/IdeaProjects/Checkout-NET-SDK/Test/Orders/OrdersSaveTest.cs" relfile="Test/Orders/OrdersSaveTest.cs" line="27" column="1" />
-    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>
