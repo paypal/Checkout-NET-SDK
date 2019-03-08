@@ -32,7 +32,8 @@ namespace PayPalCheckoutSdk.Orders
             this.Headers.Add("Authorization", Authorization);
             return this;
         }
-        
+
+        /*
         public OrdersAuthorizeRequest ContentType(string ContentType) 
         {
             this.Headers.Add("Content-Type", ContentType);
@@ -44,6 +45,7 @@ namespace PayPalCheckoutSdk.Orders
             this.Headers.Add("PayPal-Auth-Assertion", PayPalAuthAssertion);
             return this;
         }
+        */
         
         public OrdersAuthorizeRequest PayPalClientMetadataId(string PayPalClientMetadataId) 
         {

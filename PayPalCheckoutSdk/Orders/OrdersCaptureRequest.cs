@@ -27,6 +27,8 @@ namespace PayPalCheckoutSdk.Orders
             
             this.ContentType =  "application/json";
         }
+
+        /*
         public OrdersCaptureRequest Authorization(string Authorization) 
         {
             this.Headers.Add("Authorization", Authorization);
@@ -38,6 +40,7 @@ namespace PayPalCheckoutSdk.Orders
             this.Headers.Add("Content-Type", ContentType);
             return this;
         }
+        */
         
         public OrdersCaptureRequest PayPalAuthAssertion(string PayPalAuthAssertion) 
         {

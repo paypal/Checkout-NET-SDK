@@ -27,6 +27,7 @@ namespace PayPalCheckoutSdk.Orders
         [DataMember(Name="additionalItems", EmitDefaultValue = false)]
         public T AdditionalItems;
 
+        /*
         /// <summary>
         /// An array of sub-schemas. The data must validate against all sub-schemas.
         /// </summary>
@@ -38,6 +39,7 @@ namespace PayPalCheckoutSdk.Orders
         /// </summary>
         [DataMember(Name="anyOf", EmitDefaultValue = false)]
         public List<AnyOfItem> AnyOf;
+        */
 
         /// <summary>
         /// </summary>
@@ -61,11 +63,13 @@ namespace PayPalCheckoutSdk.Orders
         [DataMember(Name="items", EmitDefaultValue = false)]
         public T Items;
 
+        /*
         /// <summary>
         /// An array of links.
         /// </summary>
         [DataMember(Name="links", EmitDefaultValue = false)]
         public List<Link> Links;
+        */
 
         /// <summary>
         /// The media type and context-encoding scheme.
@@ -78,11 +82,13 @@ namespace PayPalCheckoutSdk.Orders
         [DataMember(Name="not", EmitDefaultValue = false)]
         public T Not;
 
+        /*
         /// <summary>
         /// An array of sub-schemas. The data must validate against one sub-schema.
         /// </summary>
         [DataMember(Name="oneOf", EmitDefaultValue = false)]
         public List<OneOfItem> OneOf;
+        */
 
         /// <summary>
         /// To apply this schema to the instances' URIs, start the URIs with this value.

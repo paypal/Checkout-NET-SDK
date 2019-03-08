@@ -15,7 +15,7 @@ namespace PayPalCheckoutSdk.Orders.Test
     public class OrdersVoidTest
     {
 
-        [Fact]
+        [Fact(Skip = "This test is an example. In production, you will need payer approval")]
         public async void TestOrdersVoidRequest()
         {
             OrdersVoidRequest request = new OrdersVoidRequest("zgEHzh2GVNr d")
@@ -24,7 +24,7 @@ namespace PayPalCheckoutSdk.Orders.Test
                 .Prefer("iYZUJJ17cDD9gh");
 
             HttpResponse response = await TestHarness.client().Execute(request);
-            Assert.Equal((int) response.StatusCode, 200);
+            Assert.Equal(200, (int) response.StatusCode);
             Assert.NotNull(response.Result<Order>());
 
             // Add your own checks here

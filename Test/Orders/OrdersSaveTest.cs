@@ -15,7 +15,7 @@ namespace PayPalCheckoutSdk.Orders.Test
     public class OrdersSaveTest
     {
 
-        [Fact]
+        [Fact(Skip = "This test is an example. In production, you will need payer approval")]
         public async void TestOrdersSaveRequest()
         {
             OrdersSaveRequest request = new OrdersSaveRequest("VsQZKWBL36f3LTOQ7")
@@ -24,7 +24,7 @@ namespace PayPalCheckoutSdk.Orders.Test
                 .Prefer("tdw54FOTICv0t");
 
             HttpResponse response = await TestHarness.client().Execute(request);
-            Assert.Equal((int) response.StatusCode, 201);
+            Assert.Equal(201,(int) response.StatusCode);
             Assert.NotNull(response.Result<Order>());
 
             // Add your own checks here

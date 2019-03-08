@@ -115,7 +115,7 @@ namespace Samples.AuthorizeIntentExamples
                             {
                                 FullName = "John Doe"
                             },
-                            AddressPortable = new AddressPortable
+                            Address = new PortablePostalAddress
                             {
                                 AddressLine1 = "123 Townsend St",
                                 AddressLine2 = "Floor 6",

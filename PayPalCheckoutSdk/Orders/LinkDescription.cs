@@ -53,6 +53,7 @@ namespace PayPalCheckoutSdk.Orders
         [DataMember(Name="rel", EmitDefaultValue = false)]
         public string Rel;
 
+        /*
         /// <summary>
         /// The request data or link target.
         /// </summary>
@@ -64,6 +65,7 @@ namespace PayPalCheckoutSdk.Orders
         /// </summary>
         [DataMember(Name="targetSchema", EmitDefaultValue = false)]
         public LinkSchema<T> TargetSchema;
+        */
 
         /// <summary>
         /// The link title.

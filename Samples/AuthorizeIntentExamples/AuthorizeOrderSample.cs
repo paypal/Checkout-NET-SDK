@@ -16,7 +16,7 @@ namespace Samples.AuthorizeIntentExamples
         {
             var request = new OrdersAuthorizeRequest(OrderId);
             request.Prefer("return=representation");
-            request.RequestBody(new OrderActionRequest());
+            request.RequestBody(new AuthorizeRequest());
             var response = await PayPalClient.client().Execute(request);
 
             if (debug)

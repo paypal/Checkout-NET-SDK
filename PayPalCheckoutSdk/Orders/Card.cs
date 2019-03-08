@@ -25,7 +25,7 @@ namespace PayPalCheckoutSdk.Orders
         /// The portable international postal address. Maps to [AddressValidationMetadata](https://github.com/googlei18n/libaddressinput/wiki/AddressValidationMetadata) and HTML 5.1 [Autofilling form controls: the autocomplete attribute](https://www.w3.org/TR/html51/sec-forms.html#autofilling-form-controls-the-autocomplete-attribute).
         /// </summary>
         [DataMember(Name="billing_address", EmitDefaultValue = false)]
-        public PortablePostalAddress(MediumGrained) BillingAddress;
+        public PortablePostalAddress BillingAddress;
 
         /// <summary>
         /// The card network or brand. Applies to credit, debit, gift, and payment cards.

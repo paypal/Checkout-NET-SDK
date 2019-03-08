@@ -50,7 +50,7 @@ public class RunAll
                 Console.WriteLine("Buyer:");
                 Console.WriteLine("\tEmail Address: {0}\n\tName: {1}\n\tPhone Number: {2}{3}", 
                 captureOrderResult.Payer.EmailAddress, captureOrderResult.Payer.Name.FullName, 
-                captureOrderResult.Payer.Phone.CountryCode, captureOrderResult.Payer.Phone.NationalNumber);
+                captureOrderResult.Payer.Phone.PhoneNumber.CountryCallingCode, captureOrderResult.Payer.Phone.PhoneNumber.NationalNumber);
         
         Console.WriteLine("Refunding the Order....");
         var refundOrderResponse = CapturesRefundSample.CapturesRefund(captureId, true).Result;

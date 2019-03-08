@@ -21,7 +21,7 @@ namespace PayPalCheckoutSdk.Orders.Test
             var orderResponse = await OrdersCreateTest.CreateOrder();
             var orderId = orderResponse.Result<Order>().Id;
             OrdersCaptureRequest request = new OrdersCaptureRequest(orderId);
-            request.RequestBody(new OrderActionRequest());
+            request.RequestBody(new OrderCaptureRequest());
 
             HttpResponse response = await TestHarness.client().Execute(request);
             Assert.Equal(201, (int) response.StatusCode);
