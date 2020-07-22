@@ -64,7 +64,7 @@ public async static Task<HttpResponse> createOrder()
         // Construct a request object and set desired parameters
         // Here, OrdersCreateRequest() creates a POST request to /v2/checkout/orders
         var order = new OrderRequest() {
-                Intent = "CAPTURE",
+                CheckoutPaymentIntent = "CAPTURE",
                 PurchaseUnits = new List<PurchaseUnitRequest>()
                 {
                     new PurchaseUnitRequest()
