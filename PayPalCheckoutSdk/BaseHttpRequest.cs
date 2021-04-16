@@ -1,4 +1,4 @@
-using System;
+using PayPalCheckoutSdk.RequestInterfaces;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,10 +8,11 @@ namespace PayPalCheckoutSdk
     public abstract class BaseHttpRequest
     {
         public const string ApplicationJson = "application/json";
+        public const string ApplicationXForm = "application/x-www-form-urlencoded";
+
+        public HttpMethod Method { get; }
 
         public string Path { get; protected set; }
-
-        public HttpMethod Method { get; protected set; }
 
         public IDictionary<string, ICollection<string>> Headers { get; } = new Dictionary<string, ICollection<string>>();
 
@@ -19,56 +20,45 @@ namespace PayPalCheckoutSdk
 
         public string ContentType { get; protected set; } = null!;
 
-        public string ContentEncoding { get; protected set; }
-
-        public Type ResponseType { get; protected set; }
-
         protected BaseHttpRequest(string path, HttpMethod method)
         {
-            ResponseType = typeof(void);
             Path = path;
             Method = method;
-            ContentEncoding = "identity";
         }
     }
 
-    public abstract class BaseHttpRequest<TResponseType> : BaseHttpRequest
+    public abstract class BaseHttpRequest<TResponseType> : BaseHttpRequest, IPayPalRequestWithResponseBody<TResponseType>
     {
         protected BaseHttpRequest(string path, HttpMethod method) : base(path, method)
         {
-            ResponseType = typeof(TResponseType);
         }
     }
 
-    public abstract class BaseHttpRequest<TResponseType, TRequestType> : BaseHttpRequest<TResponseType>
+    public abstract class BaseHttpRequest<TResponseType, TRequestBody> : BaseHttpRequest<TResponseType>, IPayPalRequestWithRequestBody<TRequestBody>
     {
-        public TRequestType Body { get; protected set; } = default!;
+        public TRequestBody Body { get; private set; } = default!;
 
         protected BaseHttpRequest(string path, HttpMethod method) : base(path, method)
         {
         }
 
-        public BaseHttpRequest<TResponseType, TRequestType> RequestBody(TRequestType request)
+        public void SetRequestBody(TRequestBody request)
         {
             Body = request;
-
-            return this;
         }
     }
 
-    public abstract class BaseVoidHttpRequest<TRequestType> : BaseHttpRequest
+    public abstract class BaseVoidHttpRequest<TRequestBody> : BaseHttpRequest, IPayPalRequestWithRequestBody<TRequestBody>
     {
-        public TRequestType Body { get; protected set; } = default!;
+        public TRequestBody Body { get; private set; } = default!;
 
         protected BaseVoidHttpRequest(string path, HttpMethod method) : base(path, method)
         {
         }
 
-        public BaseVoidHttpRequest<TRequestType> RequestBody(TRequestType request)
+        public void SetRequestBody(TRequestBody request)
         {
             Body = request;
-
-            return this;
         }
     }
 }

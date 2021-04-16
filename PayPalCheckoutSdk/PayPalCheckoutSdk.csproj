@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <VersionPrefix>1.0.0</VersionPrefix>
@@ -10,5 +10,17 @@
     <Title>PayPalCheckoutSdk</Title>
     <Authors>PayPal</Authors>
   </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.14" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+  </ItemGroup>
 
 </Project>

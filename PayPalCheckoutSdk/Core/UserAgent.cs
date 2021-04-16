@@ -6,7 +6,7 @@ namespace PayPalCheckoutSdk.Core
     /// <summary>
     /// PayPal User-Agent Header implementation class
     /// </summary>
-    internal class UserAgent
+    internal static class UserAgent
     {
         /// <summary>
         /// Creates the signature for the UserAgent header.
@@ -14,8 +14,10 @@ namespace PayPalCheckoutSdk.Core
         /// <returns>A string containing the signature for the UserAgent header.</returns>
         public static string GetUserAgentHeader()
         {
-            var header = new StringBuilder("PayPalSDK/PayPal-NET-SDK " + Version.VERSION + " (");
-            header.Append(string.Join(";", new string[]
+            var header = new StringBuilder("PayPalSDK/PayPal-NET-SDK ");
+            header.Append(Version.VERSION);
+            header.Append(" (");
+            header.Append(string.Join(";", new[]
             {
                 FormatUserAgentParameter("lang", "DOTNET"),
                 FormatUserAgentParameter("v", DotNetVersion),
@@ -24,6 +26,7 @@ namespace PayPalCheckoutSdk.Core
                 FormatUserAgentParameter("os", OperatingSystemName)
             }));
             header.Append(")");
+
             return header.ToString();
         }
 
@@ -33,10 +36,7 @@ namespace PayPalCheckoutSdk.Core
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value of the parameter.</param>
         /// <returns>A formatted string containing both the parameter name and value.</returns>
-        private static string FormatUserAgentParameter(string name, object value)
-        {
-            return string.Format("{0}={1}", name, value);
-        }
+        private static string FormatUserAgentParameter(string name, object value) => $"{name}={value}";
 
         /// <summary>
         /// Returns whether or not the operating system is 64-bit.

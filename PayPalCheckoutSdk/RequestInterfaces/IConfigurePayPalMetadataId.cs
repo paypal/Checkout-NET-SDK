@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace PayPalCheckoutSdk
+namespace PayPalCheckoutSdk.RequestInterfaces
 {
-    public interface IConfigurePayPalRequestId
+    public interface IConfigurePayPalMetadataId
     {
         IDictionary<string, ICollection<string>> Headers { get; }
     }

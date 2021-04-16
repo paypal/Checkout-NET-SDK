@@ -1,57 +1,21 @@
-using System;
-using System.Collections.Generic;
+using PayPalCheckoutSdk.Authentication;
+using PayPalCheckoutSdk.Core.Interfaces;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PayPalCheckoutSdk.Extensions
 {
     public static class RequestExtensions
     {
-        public static void Add(this IDictionary<string, ICollection<string>> collection, string key, string value)
+        public static async Task<AccessToken?> AuthenticateAsync(
+            this IPayPalHttpClient payPalHttpClient,
+            string? refreshToken = null, CancellationToken cancellationToken = default)
         {
-            if (!collection.ContainsKey(key))
-            {
-                collection.Add(key, new List<string>());
-            }
+            var request = new AccessTokenRequest(payPalHttpClient.GetPayPalOptions, refreshToken);
 
-            collection[key].Add(value);
-        }
+            var response = await payPalHttpClient.ExecuteAsync<AccessTokenRequest, AccessToken, AccessToken>(request, null, cancellationToken);
 
-        public static TRequest SetPreferReturn<TRequest>(this TRequest request, EPreferReturn preferReturn)
-            where TRequest : IConfigurePrefer
-        {
-            var preferValue = preferReturn switch
-            {
-                EPreferReturn.Minimal => "return=minimal",
-                EPreferReturn.Representation => "return=representation",
-                _ => throw new ArgumentOutOfRangeException(nameof(preferReturn), preferReturn, null)
-            };
-
-            request.Headers.Add("Prefer", preferValue);
-
-            return request;
-        }
-
-        public static TRequest SetPayPalRequestId<TRequest>(this TRequest request, string payPalRequestId)
-            where TRequest : IConfigurePayPalRequestId
-        {
-            request.Headers.Add("PayPal-Request-Id", payPalRequestId);
-
-            return request;
-        }
-
-        public static TRequest SetPayPalClientMetadataId<TRequest>(this TRequest request, string payPalClientMetadataId)
-            where TRequest : IConfigurePayPalMetadataId
-        {
-            request.Headers.Add("PayPal-Client-Metadata-Id", payPalClientMetadataId);
-
-            return request;
-        }
-
-        public static TRequest SetPayPalPartnerAttributionId<TRequest>(this TRequest request, string payPalPartnerAttributionId)
-            where TRequest : IConfigurePayPalMetadataId
-        {
-            request.Headers.Add("PayPal-Partner-Attribution-Id", payPalPartnerAttributionId);
-
-            return request;
+            return response.ResponseBody;
         }
     }
 }

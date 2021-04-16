@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace PayPalCheckoutSdk
+namespace PayPalCheckoutSdk.Authentication
 {
     [DataContract]
     public class AccessToken
@@ -15,7 +15,7 @@ namespace PayPalCheckoutSdk
         [DataMember(Name = "expires_in")]
         public int ExpiresIn { get; set; }
 
-        private DateTime ReceivedDate { get; set; }
+        private DateTime ReceivedDate { get; }
 
         public AccessToken(DateTime? now = null)
         {

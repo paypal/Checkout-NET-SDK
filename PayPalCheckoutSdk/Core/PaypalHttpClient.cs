@@ -1,75 +1,198 @@
+using Microsoft.Extensions.Options;
+using PayPalCheckoutSdk.Authentication;
+using PayPalCheckoutSdk.Configuration;
+using PayPalCheckoutSdk.Core.Interfaces;
+using PayPalCheckoutSdk.RequestInterfaces;
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace PayPalCheckoutSdk.Core
 {
-    /*
-    public class PayPalHttpClient : HttpClient
+    public class PayPalHttpClient : IPayPalHttpClient
     {
-        private string refreshToken;
-        private IInjector gzipInjector;
-        private IInjector authorizationInjector;
+        private readonly HttpClient _httpClient;
 
-        public PayPalHttpClient(PayPalEnvironment environment) : this(environment, null)
-        { }
+        private readonly IPayPayEncoder _payPayEncoder;
 
-        public PayPalHttpClient(PayPalEnvironment environment, string refreshToken) : base(environment)
+        private readonly IOptions<PayPalOptions> _payPalOptions;
+
+        public PayPalHttpClient(
+            HttpClient httpClient,
+            IPayPayEncoder payPayEncoder,
+            IOptions<PayPalOptions> payPalOptions
+        )
         {
-            this.refreshToken = refreshToken;
-            gzipInjector = new GzipInjector();
-            authorizationInjector = new AuthorizationInjector(this, environment, refreshToken);
-
-            AddInjector(this.gzipInjector);
-            AddInjector(this.authorizationInjector);
+            _httpClient = httpClient;
+            _payPayEncoder = payPayEncoder;
+            _payPalOptions = payPalOptions;
         }
 
-        protected override string GetUserAgent()
-        {
-            return UserAgent.GetUserAgentHeader();
-        }
+        public PayPalOptions GetPayPalOptions => _payPalOptions.Value;
 
-        class AuthorizationInjector : IInjector
+        protected virtual HttpRequestMessage CreateHttpRequest<TRequest>(
+            TRequest request,
+            AccessToken? accessToken = null
+        )
+            where TRequest : BaseHttpRequest
         {
-            private HttpClient client;
-            private PayPalEnvironment environment;
-            private AccessToken accessToken;
-            private string refreshToken;
+            var httpRequest = new HttpRequestMessage(
+                request.Method,
+                new Uri(request.Path, UriKind.Relative)
+            );
 
-            public AuthorizationInjector(HttpClient client, PayPalEnvironment environment, string refreshToken)
+            foreach (var (header, headerValue) in request.Headers)
             {
-                this.environment = environment;
-                this.client = client;
-                this.refreshToken = refreshToken;
+                httpRequest.Headers.Add(header, headerValue);
             }
 
-            public void Inject(HttpRequest request)
+            if (request.Authorization != null)
             {
-                if (!request.Headers.Contains("Authorization") && !(request is AccessTokenRequest || request is RefreshTokenRequest))
+                httpRequest.Headers.Authorization = request.Authorization;
+            }
+            else if (accessToken != null)
+            {
+                httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
+            }
+
+
+            return httpRequest;
+        }
+
+        protected virtual HttpContent CreateHttpContent<TRequest, TRequestBody>(
+            TRequest request
+        )
+            where TRequest : BaseHttpRequest
+        {
+            if (request is IPayPalRequestWithRequestBody<TRequestBody> requestWithRequestBody)
+            {
+                return _payPayEncoder.SerializeRequest(requestWithRequestBody.Body, requestWithRequestBody.ContentType);
+            }
+
+            throw new ArgumentException($"The request {typeof(TRequest)} do not implement {typeof(IPayPalRequestWithRequestBody<TRequestBody>)}");
+        }
+
+        protected virtual async Task<PayPalHttpResponse> ProcessResponseAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                return new PayPalHttpResponse(response.Headers, response.StatusCode);
+            }
+
+            var responseBodyContent = await response.Content.ReadAsStringAsync(
+#if NET5_0
+                cancellationToken
+#endif
+            );
+
+            throw new PayPalHttpException(response.StatusCode, response.Headers, responseBodyContent);
+        }
+
+        protected virtual async Task<PayPalHttpResponse<TResponse>> ProcessResponseAsync<TResponse>(HttpResponseMessage response, CancellationToken cancellationToken)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                TResponse? responseBody = default;
+
+                if (response.Content.Headers.ContentType != null)
                 {
-                    if (this.accessToken == null || this.accessToken.IsExpired())
-                    {
-                        var accessTokenResponse = fetchAccessToken();
-                        this.accessToken = accessTokenResponse.Result<AccessToken>();
-                    }
-                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
+                    responseBody = await _payPayEncoder.DeserializeResponse<TResponse>(
+                        response.Content,
+                        response.Content.Headers.ContentType,
+                        cancellationToken
+                    );
                 }
+
+                return new PayPalHttpResponse<TResponse>(response.Headers, response.StatusCode, responseBody);
             }
 
-            private HttpResponse fetchAccessToken()
-            {
-                //create a new client for access token.
-                HttpClient AccessTokenClient = new HttpClient(environment);
-                AccessTokenRequest request = new AccessTokenRequest(environment, refreshToken);
-                //make fetch access token call sync to avoid deadlock.
-                Task<HttpResponse> executeTask = Task.Run<HttpResponse>(async () => await AccessTokenClient.Execute(request));
-                return executeTask.Result;
-            }
+            var responseBodyContent = await response.Content.ReadAsStringAsync(
+#if NET5_0
+                cancellationToken
+#endif
+            );
+
+            throw new PayPalHttpException(response.StatusCode, response.Headers, responseBodyContent);
         }
 
-        private class GzipInjector : IInjector
+        public virtual async Task<PayPalHttpResponse<TResponse>> ExecuteAsync<TRequest, TRequestBody, TResponse>(
+            TRequest request,
+            AccessToken? accessToken,
+            CancellationToken cancellationToken
+        )
+            where TRequest : BaseHttpRequest<TRequestBody>
         {
-            public void Inject(HttpRequest request)
+            var httpRequest = CreateHttpRequest(request, accessToken);
+
+            if (request is IPayPalRequestWithRequestBody)
             {
-                request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+                using var httpContent = CreateHttpContent<TRequest, TRequestBody>(request);
+                httpRequest.Content = httpContent;
             }
+
+            var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+
+            return await ProcessResponseAsync<TResponse>(response, cancellationToken);
+        }
+
+        public virtual async Task<PayPalHttpResponse<TResponse>> ExecuteAsync<TRequest, TResponse>(
+            TRequest request,
+            AccessToken? accessToken,
+            CancellationToken cancellationToken
+        )
+            where TRequest : BaseHttpRequest
+        {
+            if (request is IPayPalRequestWithRequestBody)
+            {
+                throw new ArgumentException($"Use the {nameof(ExecuteAsync)}<TRequest, TRequestBody, TResponse> method signature");
+            }
+
+            var httpRequest = CreateHttpRequest(request, accessToken);
+
+            var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+
+            return await ProcessResponseAsync<TResponse>(response, cancellationToken);
+        }
+
+        public virtual async Task<PayPalHttpResponse> ExecuteVoidAsync<TRequest, TRequestBody>(
+            TRequest request,
+            AccessToken? accessToken,
+            CancellationToken cancellationToken
+        )
+            where TRequest : BaseVoidHttpRequest<TRequestBody>
+        {
+            var httpRequest = CreateHttpRequest(request, accessToken);
+
+            if (request is IPayPalRequestWithRequestBody)
+            {
+                using var httpContent = CreateHttpContent<TRequest, TRequestBody>(request);
+                httpRequest.Content = httpContent;
+            }
+
+            var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+
+            return await ProcessResponseAsync(response, cancellationToken);
+        }
+
+        public virtual async Task<PayPalHttpResponse> ExecuteVoidAsync<TRequest>(
+            TRequest request,
+            AccessToken? accessToken,
+            CancellationToken cancellationToken
+        )
+            where TRequest : BaseHttpRequest
+        {
+            if (request is IPayPalRequestWithRequestBody)
+            {
+                throw new ArgumentException($"Use the {nameof(ExecuteVoidAsync)}<TRequest, TRequestBody> method signature");
+            }
+
+            var httpRequest = CreateHttpRequest(request, accessToken);
+
+            var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+
+            return await ProcessResponseAsync(response, cancellationToken);
         }
     }
-    */
 }

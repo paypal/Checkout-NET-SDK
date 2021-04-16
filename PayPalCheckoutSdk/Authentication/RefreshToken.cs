@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace PayPalCheckoutSdk
+namespace PayPalCheckoutSdk.Authentication
 {
     [DataContract]
     public class RefreshToken
