@@ -25,6 +25,7 @@ namespace PayPalCheckoutSdk
     }
 
     public abstract class BaseHttpRequest<TResponseType> : BaseHttpRequest, IPayPalRequestWithResponseBody<TResponseType>
+        where TResponseType : notnull
     {
         protected BaseHttpRequest(string path, HttpMethod method) : base(path, method)
         {
@@ -32,6 +33,8 @@ namespace PayPalCheckoutSdk
     }
 
     public abstract class BaseHttpRequest<TResponseType, TRequestBody> : BaseHttpRequest<TResponseType>, IPayPalRequestWithRequestBody<TRequestBody>
+        where TResponseType : notnull
+        where TRequestBody : notnull
     {
         public TRequestBody Body { get; private set; } = default!;
 
@@ -39,6 +42,7 @@ namespace PayPalCheckoutSdk
         {
         }
 
+        // ReSharper disable once MemberCanBeProtected.Global
         public void SetRequestBody(TRequestBody request)
         {
             Body = request;
@@ -46,6 +50,7 @@ namespace PayPalCheckoutSdk
     }
 
     public abstract class BaseVoidHttpRequest<TRequestBody> : BaseHttpRequest, IPayPalRequestWithRequestBody<TRequestBody>
+        where TRequestBody : notnull
     {
         public TRequestBody Body { get; private set; } = default!;
 

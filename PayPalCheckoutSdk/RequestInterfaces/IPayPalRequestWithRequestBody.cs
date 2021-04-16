@@ -6,6 +6,7 @@ namespace PayPalCheckoutSdk.RequestInterfaces
     }
 
     public interface IPayPalRequestWithRequestBody<out TRequestBody> : IPayPalRequestWithRequestBody
+        where TRequestBody : notnull
     {
         TRequestBody Body { get; }
     }

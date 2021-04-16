@@ -66,6 +66,7 @@ namespace PayPalCheckoutSdk.Core
             TRequest request
         )
             where TRequest : BaseHttpRequest
+            where TRequestBody : notnull
         {
             if (request is IPayPalRequestWithRequestBody<TRequestBody> requestWithRequestBody)
             {
@@ -75,7 +76,9 @@ namespace PayPalCheckoutSdk.Core
             throw new ArgumentException($"The request {typeof(TRequest)} do not implement {typeof(IPayPalRequestWithRequestBody<TRequestBody>)}");
         }
 
-        protected virtual async Task<PayPalHttpResponse> ProcessResponseAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+        protected virtual async Task<PayPalHttpResponse> ProcessResponseAsync(
+            HttpResponseMessage response, CancellationToken cancellationToken
+        )
         {
             if (response.IsSuccessStatusCode)
             {
@@ -91,7 +94,10 @@ namespace PayPalCheckoutSdk.Core
             throw new PayPalHttpException(response.StatusCode, response.Headers, responseBodyContent);
         }
 
-        protected virtual async Task<PayPalHttpResponse<TResponse>> ProcessResponseAsync<TResponse>(HttpResponseMessage response, CancellationToken cancellationToken)
+        protected virtual async Task<PayPalHttpResponse<TResponse>> ProcessResponseAsync<TResponse>(
+            HttpResponseMessage response, CancellationToken cancellationToken
+        )
+            where TResponse : notnull
         {
             if (response.IsSuccessStatusCode)
             {
@@ -124,6 +130,8 @@ namespace PayPalCheckoutSdk.Core
             CancellationToken cancellationToken
         )
             where TRequest : BaseHttpRequest<TRequestBody>
+            where TRequestBody : notnull
+            where TResponse : notnull
         {
             var httpRequest = CreateHttpRequest(request, accessToken);
 
@@ -144,6 +152,7 @@ namespace PayPalCheckoutSdk.Core
             CancellationToken cancellationToken
         )
             where TRequest : BaseHttpRequest
+            where TResponse : notnull
         {
             if (request is IPayPalRequestWithRequestBody)
             {
@@ -163,6 +172,7 @@ namespace PayPalCheckoutSdk.Core
             CancellationToken cancellationToken
         )
             where TRequest : BaseVoidHttpRequest<TRequestBody>
+            where TRequestBody : notnull
         {
             var httpRequest = CreateHttpRequest(request, accessToken);
 

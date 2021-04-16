@@ -13,24 +13,32 @@ namespace PayPalCheckoutSdk.Core.Interfaces
             TRequest request,
             AccessToken? accessToken = null,
             CancellationToken cancellationToken = default
-        ) where TRequest : BaseHttpRequest<TRequestBody>;
+        )
+            where TRequest : BaseHttpRequest<TRequestBody>
+            where TRequestBody : notnull
+            where TResponse : notnull;
 
         Task<PayPalHttpResponse<TResponse>> ExecuteAsync<TRequest, TResponse>(
             TRequest request,
             AccessToken? accessToken,
             CancellationToken cancellationToken
-        ) where TRequest : BaseHttpRequest;
+        )
+            where TRequest : BaseHttpRequest
+            where TResponse : notnull;
 
         Task<PayPalHttpResponse> ExecuteVoidAsync<TRequest, TRequestBody>(
             TRequest request,
             AccessToken? accessToken = null,
             CancellationToken cancellationToken = default
-        ) where TRequest : BaseVoidHttpRequest<TRequestBody>;
+        )
+            where TRequest : BaseVoidHttpRequest<TRequestBody>
+            where TRequestBody : notnull;
 
         Task<PayPalHttpResponse> ExecuteVoidAsync<TRequest>(
             TRequest request,
             AccessToken? accessToken = null,
             CancellationToken cancellationToken = default
-        ) where TRequest : BaseHttpRequest;
+        )
+            where TRequest : BaseHttpRequest;
     }
 }
