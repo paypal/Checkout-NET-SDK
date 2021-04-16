@@ -2,58 +2,22 @@
 
 ![Home Image](homepage.jpg)
 
-### To consolidate support across various channels, we have currently turned off the feature of GitHub issues. Please visit https://www.paypal.com/support to submit your request or ask questions within our community forum.
-
 __Welcome to PayPal Dotnet SDK__. This repository contains PayPal's Dotnet SDK and samples for [v2/checkout/orders](https://developer.paypal.com/docs/api/orders/v2/) and [v2/payments](https://developer.paypal.com/docs/api/payments/v2/) APIs.
 
 This is a part of the next major PayPal SDK. It includes a simplified interface to only provide simple model objects and blueprints for HTTP calls. This repo currently contains functionality for PayPal Checkout APIs which includes [Orders V2](https://developer.paypal.com/docs/api/orders/v2/) and [Payments V2](https://developer.paypal.com/docs/api/payments/v2/).
 
 Please refer to the [PayPal Checkout Integration Guide](https://developer.paypal.com/docs/checkout/) for more information. Also refer to [Setup your SDK](https://developer.paypal.com/docs/checkout/reference/server-integration/setup-sdk/) for additional information about setting up the SDK's.
 
-
 ## Prerequisites
 
-.NET 4.6.1 or later
+.NET Core 3.1 OR .Net Standard 2.1
 
 An environment which supports TLS 1.2 (see the TLS-update site for more information)
 
-PayPalHttp 1.0.0
-
 ## Usage
-
-### Binaries
-
-It is not necessary to fork this repository for using the PayPal SDK. Please take a look at [PayPal Checkout Server SDK](https://developer.paypal.com/docs/checkout/reference/server-integration) for configuring and working with SDK without forking this code.
-
-For contributing to this repository or using the samples you can fork this repository.
 
 ### Setting up credentials
 Get client ID and client secret by going to https://developer.paypal.com/developer/applications and generating a REST API app. Get <b>Client ID</b> and <b>Secret</b> from there.
-
-```dotnet
-using System;
-using PayPalCheckoutSdk.Core;
-using PayPalCheckoutSdk.Orders;
-using PayPalHttp;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-public class CaptureOrderSample
-{
-    static String clientId = "PAYPAL-CLIENT-ID";
-    static String secret = "PAYPAL-CLIENT-SECRET";
-
-    public static HttpClient client()
-    {
-    // Creating a sandbox environment
-    PayPalEnvironment environment = new SandboxEnvironment(clientId, secret);
-
-    // Creating a client for the environment
-    PayPalHttpClient client = new PayPalHttpClient(environment);
-    return client;
-    }
-}
-```
 
 ## Examples
 ### Creating an Order

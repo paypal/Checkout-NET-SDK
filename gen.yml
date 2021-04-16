@@ -1,6 +1,0 @@
----
-projectName: CheckoutNETSDK
-language: dotnet
-sourcePath: Source
-testPath: Test
-apiVersioning: false
