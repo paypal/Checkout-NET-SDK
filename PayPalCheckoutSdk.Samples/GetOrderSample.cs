@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using PayPalHttp;
-using PayPalCheckoutSdk.Core;
 using PayPalCheckoutSdk.Orders;
-using Samples.CaptureIntentExamples;
 
-namespace Samples
+namespace PayPalCheckoutSdk.Samples
 {
     public class GetOrderSample
     {
@@ -15,7 +11,7 @@ namespace Samples
          */
         public async static Task<HttpResponse> GetOrder(string orderId, bool debug = false)
         {
-            OrdersGetRequest request = new OrdersGetRequest(orderId);
+            var request = new OrdersGetRequest(orderId);
 
             var response = await PayPalClient.client().Execute(request);
             var result = response.Result<Order>();
@@ -28,6 +24,7 @@ namespace Samples
             {
                 Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
             }
+
             AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
             Console.WriteLine("Total Amount: {0} {1}", amount.CurrencyCode, amount.Value);
             Console.WriteLine("Response JSON: \n {0}", PayPalClient.ObjectToJSONString(result));

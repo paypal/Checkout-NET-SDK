@@ -4,8 +4,8 @@
 // @type object
 // @data H4sIAAAAAAAC/6yPQUsDMRCF7/6KYc6LeN5bYasUZS1SvIg0o5k1gZisMwkSpP9dNGVRFE8e583H43tvuKszY4/CU4l2r5ly0b3lTD4odnhL4ukh8EjPf2GXXI8EdjiwPoqfs08Re9w5hiMIaYLsGFoLtJZT7HAlQrWZnHV4w2SvY6jYTxSUP4KX4oXtEmwlzSzZs2J/t2zQLD4+/SZNmuI3yyX66dpe8OrqV1dH+nma7XocNuOFgSRgzlebq/Vg/mlJLCEc7g8n7wAAAP//
 // DO NOT EDIT
+
 using System.Runtime.Serialization;
-using System.Collections.Generic;
 
 
 namespace PayPalCheckoutSdk.Orders
@@ -17,15 +17,16 @@ namespace PayPalCheckoutSdk.Orders
     public class RefundStatusDetails
     {
         /// <summary>
-	    /// Required default constructor
-		/// </summary>
-        public RefundStatusDetails() {}
+        /// Required default constructor
+        /// </summary>
+        public RefundStatusDetails()
+        {
+        }
 
         /// <summary>
         /// The reason why the refund has the `PENDING` or `FAILED` status.
         /// </summary>
-        [DataMember(Name="reason", EmitDefaultValue = false)]
-        public string Reason;
+        [DataMember(Name = "reason", EmitDefaultValue = false)]
+        public string Reason { get; set; } = null!;
     }
 }
-

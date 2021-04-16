@@ -1,23 +1,23 @@
-﻿using System;
+﻿using PayPalCheckoutSdk.Core;
 using System.Collections.Generic;
-using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using PayPalHttp;
 
-namespace PayPalCheckoutSdk.Core
+namespace PayPalCheckoutSdk
 {
-    public class RefreshTokenRequest: HttpRequest
+    public class RefreshTokenRequest : BaseHttpRequest<RefreshToken, IDictionary<string, string>>
     {
-        public RefreshTokenRequest(PayPalEnvironment environment, string code): base("/v1/identity/openidconnect/tokenservice", HttpMethod.Post, typeof(RefreshToken))
+        public RefreshTokenRequest(
+            PayPalEnvironment environment, string code
+        ) : base("/v1/identity/openidconnect/tokenservice", HttpMethod.Post)
         {
-            this.Headers.Authorization = new AuthenticationHeaderValue("Basic", environment.AuthorizationString());
-            this.Body = new Dictionary<string, string>()
+            Authorization = new AuthenticationHeaderValue("Basic", environment.AuthorizationString());
+            Body = new Dictionary<string, string>
             {
                 {"grant_type", "authorization_code"},
                 {"code", code},
             };
-            this.ContentType = "application/x-www-form-urlencoded";
+            ContentType = "application/x-www-form-urlencoded";
         }
     }
 }

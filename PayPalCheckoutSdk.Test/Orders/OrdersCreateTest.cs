@@ -1,38 +1,39 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Net.Http;
+using PayPalCheckoutSdk.Orders;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PayPalHttp;
 using Xunit;
 using Xunit.Abstractions;
-using PayPalCheckoutSdk.Test;
-using static PayPalCheckoutSdk.Test.TestHarness;
 
-
-namespace PayPalCheckoutSdk.Orders.Test
+namespace PayPalCheckoutSdk.Test.Orders
 {
     [Collection("Orders")]
     public class OrdersCreateTest
     {
-        private static OrderRequest buildRequestBody()
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public OrdersCreateTest(ITestOutputHelper testOutputHelper)
         {
-            var order = new OrderRequest() {
+            _testOutputHelper = testOutputHelper;
+        }
+
+        private static OrderRequest BuildRequestBody()
+        {
+            var order = new OrderRequest
+            {
                 CheckoutPaymentIntent = "CAPTURE",
-                PurchaseUnits = new List<PurchaseUnitRequest>()
+                PurchaseUnits = new List<PurchaseUnitRequest>
                 {
-                    new PurchaseUnitRequest()
+                    new PurchaseUnitRequest
                     {
                         ReferenceId = "test_ref_id1",
-                        AmountWithBreakdown = new AmountWithBreakdown()
+                        AmountWithBreakdown = new AmountWithBreakdown
                         {
                             CurrencyCode = "USD",
                             Value = "100.00"
                         }
                     }
-                }, 
-                ApplicationContext = new ApplicationContext()
+                },
+                ApplicationContext = new ApplicationContext
                 {
                     ReturnUrl = "https://www.example.com",
                     CancelUrl = "https://www.example.com"
@@ -40,11 +41,12 @@ namespace PayPalCheckoutSdk.Orders.Test
             };
             return order;
         }
-        public async static Task<HttpResponse> CreateOrder() 
+
+        public async static Task<HttpResponse> CreateOrder()
         {
             var request = new OrdersCreateRequest();
             request.Prefer("return=representation");
-            request.RequestBody(buildRequestBody());
+            request.RequestBody(BuildRequestBody());
             return await TestHarness.client().Execute(request);
         }
 
@@ -61,7 +63,7 @@ namespace PayPalCheckoutSdk.Orders.Test
             Assert.NotNull(createdOrder.PurchaseUnits);
             Assert.Single(createdOrder.PurchaseUnits);
 
-            PurchaseUnit firstPurchaseUnit = createdOrder.PurchaseUnits[0];
+            var firstPurchaseUnit = createdOrder.PurchaseUnits[0];
             Assert.Equal("test_ref_id1", firstPurchaseUnit.ReferenceId);
             Assert.Equal("USD", firstPurchaseUnit.AmountWithBreakdown.CurrencyCode);
             Assert.Equal("100.00", firstPurchaseUnit.AmountWithBreakdown.Value);
@@ -69,18 +71,20 @@ namespace PayPalCheckoutSdk.Orders.Test
             Assert.NotNull(createdOrder.CreateTime);
 
             Assert.NotNull(createdOrder.Links);
-            bool foundApproveURL = false;
-            foreach (var linkDescription in createdOrder.Links) {
-                if ("approve".Equals(linkDescription.Rel)) {
-                    foundApproveURL = true;
+            var foundApproveUrl = false;
+            foreach (var linkDescription in createdOrder.Links)
+            {
+                if ("approve".Equals(linkDescription.Rel))
+                {
+                    foundApproveUrl = true;
                     Assert.NotNull(linkDescription.Href);
                     Assert.Equal("GET", linkDescription.Method);
-                    Console.WriteLine(linkDescription.Href);
+                    _testOutputHelper.WriteLine(linkDescription.Href);
                 }
             }
 
-            Console.WriteLine(createdOrder.Id);
-            Assert.True(foundApproveURL);
+            _testOutputHelper.WriteLine(createdOrder.Id);
+            Assert.True(foundApproveUrl);
             Assert.Equal("CREATED", createdOrder.Status);
         }
     }

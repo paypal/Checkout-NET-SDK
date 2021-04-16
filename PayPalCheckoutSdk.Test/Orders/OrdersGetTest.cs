@@ -1,26 +1,26 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Net.Http;
-using System.Collections.Generic;
-using PayPalHttp;
+using PayPalCheckoutSdk.Orders;
 using Xunit;
-using PayPalCheckoutSdk.Test;
-using static PayPalCheckoutSdk.Test.TestHarness;
+using Xunit.Abstractions;
 
-
-namespace PayPalCheckoutSdk.Orders.Test
+namespace PayPalCheckoutSdk.Test.Orders
 {
     [Collection("Orders")]
     public class OrdersGetTest
     {
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public OrdersGetTest(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+        }
+
         [Fact]
         public async void TestOrdersGetRequest()
         {
             var response = await OrdersCreateTest.CreateOrder();
             Order createdOrder = response.Result<Order>();
 
-            OrdersGetRequest request = new OrdersGetRequest(createdOrder.Id);
+            var request = new OrdersGetRequest(createdOrder.Id);
 
             response = await TestHarness.client().Execute(request);
             Assert.Equal(200, (int) response.StatusCode);
@@ -30,9 +30,10 @@ namespace PayPalCheckoutSdk.Orders.Test
             Assert.NotNull(retrievedOrder.PurchaseUnits);
             Assert.Equal(retrievedOrder.PurchaseUnits.Count, createdOrder.PurchaseUnits.Count);
 
-            for (int count = 0; count < retrievedOrder.PurchaseUnits.Count; count++) {
-                PurchaseUnit retrievedOrderPurchaseUnit = retrievedOrder.PurchaseUnits[count];
-                PurchaseUnit createdOrderPurchaseUnit = createdOrder.PurchaseUnits[count];
+            for (var count = 0; count < retrievedOrder.PurchaseUnits.Count; count++)
+            {
+                var retrievedOrderPurchaseUnit = retrievedOrder.PurchaseUnits[count];
+                var createdOrderPurchaseUnit = createdOrder.PurchaseUnits[count];
                 Assert.Equal(retrievedOrderPurchaseUnit.ReferenceId, createdOrderPurchaseUnit.ReferenceId);
                 Assert.Equal(retrievedOrderPurchaseUnit.AmountWithBreakdown.CurrencyCode, createdOrderPurchaseUnit.AmountWithBreakdown.CurrencyCode);
                 Assert.Equal(retrievedOrderPurchaseUnit.AmountWithBreakdown.Value, createdOrderPurchaseUnit.AmountWithBreakdown.Value);
@@ -41,20 +42,21 @@ namespace PayPalCheckoutSdk.Orders.Test
             Assert.NotNull(retrievedOrder.CreateTime);
 
             Assert.NotNull(createdOrder.Links);
-            bool foundApproveURL = false;
-            foreach (var linkDescription in createdOrder.Links) {
-                if ("approve".Equals(linkDescription.Rel)) {
-                    foundApproveURL = true;
+            var foundApproveUrl = false;
+            foreach (var linkDescription in createdOrder.Links)
+            {
+                if ("approve".Equals(linkDescription.Rel))
+                {
+                    foundApproveUrl = true;
                     Assert.NotNull(linkDescription.Href);
                     Assert.Equal("GET", linkDescription.Method);
-                    Console.WriteLine(linkDescription.Href);
+                    _testOutputHelper.WriteLine(linkDescription.Href);
                 }
             }
 
-            Console.WriteLine(createdOrder.Id);
-            Assert.True(foundApproveURL);
+            _testOutputHelper.WriteLine(createdOrder.Id);
+            Assert.True(foundApproveUrl);
             Assert.Equal("CREATED", createdOrder.Status);
-
         }
     }
 }

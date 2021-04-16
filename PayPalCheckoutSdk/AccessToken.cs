@@ -1,31 +1,34 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace PayPalCheckoutSdk.Core
+namespace PayPalCheckoutSdk
 {
     [DataContract]
     public class AccessToken
     {
         [DataMember(Name = "access_token")]
-        public string Token;
+        public string Token { get; set; } = null!;
 
         [DataMember(Name = "token_type")]
-        public string TokenType;
+        public string TokenType { get; set; } = null!;
 
         [DataMember(Name = "expires_in")]
-        public int ExpiresIn;
+        public int ExpiresIn { get; set; }
 
-        private DateTime createDate;
+        private DateTime ReceivedDate { get; set; }
 
-        public AccessToken()
+        public AccessToken(DateTime? now = null)
         {
-            this.createDate = DateTime.Now;
+            ReceivedDate = now ?? DateTime.Now;
         }
 
-        public bool IsExpired()
+        public bool IsExpired(DateTime? now = null)
         {
-            DateTime expireDate = this.createDate.Add(TimeSpan.FromSeconds(this.ExpiresIn));
-            return DateTime.Now.CompareTo(expireDate) > 0;
+            var expireDate = ReceivedDate.Add(TimeSpan.FromSeconds(ExpiresIn));
+
+            now ??= DateTime.Now;
+
+            return now.Value.CompareTo(expireDate) > 0;
         }
     }
 }

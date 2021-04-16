@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using Samples;
 using PayPalCheckoutSdk.Orders;
-using PayPalHttp;
 
-namespace Samples.AuthorizeIntentExamples
+namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
 {
     public class AuthorizeOrderSample
     {
-
         //This function can be used to perform authorization on the approved order.
         public async static Task<HttpResponse> AuthorizeOrder(string OrderId, bool debug = false)
         {
@@ -31,6 +26,7 @@ namespace Samples.AuthorizeIntentExamples
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
+
                 AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
                 Console.WriteLine("Buyer:");
                 Console.WriteLine("\tEmail Address: {0}", result.Payer.Email);

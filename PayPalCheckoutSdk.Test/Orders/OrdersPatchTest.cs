@@ -1,24 +1,17 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Net.Http;
+using PayPalCheckoutSdk.Orders;
 using System.Collections.Generic;
-using PayPalHttp;
 using Xunit;
-using PayPalCheckoutSdk.Test;
-using static PayPalCheckoutSdk.Test.TestHarness;
 
-
-namespace PayPalCheckoutSdk.Orders.Test
+namespace PayPalCheckoutSdk.Test.Orders
 {
     [Collection("Orders")]
     public class OrdersPatchTest
     {
         private List<Patch<string>> buildRequestBody()
         {
-            return new List<Patch<string>>()
+            return new List<Patch<string>>
             {
-                new Patch<string>()
+                new Patch<string>
                 {
                     Op = "add",
                     Path = "/purchase_units/@reference_id=='test_ref_id1'/description",
@@ -29,10 +22,10 @@ namespace PayPalCheckoutSdk.Orders.Test
 
         [Fact]
         public async void TestOrdersPatchRequest()
-        {   
+        {
             var response = await OrdersCreateTest.CreateOrder();
             Order createdOrder = response.Result<Order>();
-            OrdersPatchRequest<string> request = new OrdersPatchRequest<string>(createdOrder.Id);
+            var request = new OrdersPatchRequest<string>(createdOrder.Id);
             request.RequestBody(buildRequestBody());
 
             response = await TestHarness.client().Execute(request);
@@ -43,12 +36,11 @@ namespace PayPalCheckoutSdk.Orders.Test
 
             Order getOrder = response.Result<Order>();
 
-            PurchaseUnit firstPurchaseUnit = getOrder.PurchaseUnits[0];
+            var firstPurchaseUnit = getOrder.PurchaseUnits[0];
             Assert.Equal("test_ref_id1", firstPurchaseUnit.ReferenceId);
             Assert.Equal("USD", firstPurchaseUnit.AmountWithBreakdown.CurrencyCode);
             Assert.Equal("100.00", firstPurchaseUnit.AmountWithBreakdown.Value);
             Assert.Equal("added_description", firstPurchaseUnit.Description);
-
         }
     }
 }

@@ -1,45 +1,44 @@
 using System;
 using System.Text;
-using PayPalHttp;
 
 namespace PayPalCheckoutSdk.Core
 {
     /// <summary>
     /// Recommended to use SandboxEnvironment for testing or LiveEnvironment for production.
     /// </summary>
-    public class PayPalEnvironment : PayPalHttp.Environment
+    public class PayPalEnvironment
     {
-        private string baseUrl;
-        private string clientId;
-        private string clientSecret;
-        private string webUrl;
+        private readonly string _baseUrl;
+        private readonly string _clientId;
+        private readonly string _clientSecret;
+        private readonly string _webUrl;
 
         public PayPalEnvironment(string clientId, string clientSecret, string baseUrl, string webUrl)
         {
-            this.clientId = clientId;
-            this.clientSecret = clientSecret;
-            this.baseUrl = baseUrl;
-            this.webUrl = webUrl;
+            _clientId = clientId;
+            _clientSecret = clientSecret;
+            _baseUrl = baseUrl;
+            _webUrl = webUrl;
         }
 
         public string BaseUrl()
         {
-            return this.baseUrl;
+            return _baseUrl;
         }
 
         public string AuthorizationString()
         {
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_clientId}:{_clientSecret}"));
         }
 
         public string ClientId()
         {
-            return clientId;
+            return _clientId;
         }
 
         public string WebUrl()
         {
-            return this.webUrl;
+            return _webUrl;
         }
     }
 
@@ -49,7 +48,8 @@ namespace PayPalCheckoutSdk.Core
     public class SandboxEnvironment : PayPalEnvironment
     {
         public SandboxEnvironment(string clientId, string clientSecret) : base(clientId, clientSecret, "https://api.sandbox.paypal.com", "https://www.sandbox.paypal.com")
-        { }
+        {
+        }
     }
 
     /// <summary>
@@ -58,6 +58,7 @@ namespace PayPalCheckoutSdk.Core
     public class LiveEnvironment : PayPalEnvironment
     {
         public LiveEnvironment(string clientId, string clientSecret) : base(clientId, clientSecret, "https://api.paypal.com", "https://www.paypal.com")
-        { }
+        {
+        }
     }
 }

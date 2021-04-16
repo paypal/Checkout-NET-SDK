@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace PayPalCheckoutSdk.Core
@@ -16,7 +15,7 @@ namespace PayPalCheckoutSdk.Core
         public static string GetUserAgentHeader()
         {
             var header = new StringBuilder("PayPalSDK/PayPal-NET-SDK " + Version.VERSION + " (");
-            header.Append(string.Join(";", new string[] 
+            header.Append(string.Join(";", new string[]
             {
                 FormatUserAgentParameter("lang", "DOTNET"),
                 FormatUserAgentParameter("v", DotNetVersion),
@@ -43,35 +42,26 @@ namespace PayPalCheckoutSdk.Core
         /// Returns whether or not the operating system is 64-bit.
         /// </summary>
         /// <returns>True = 64-bit, False = 32-bit</returns>
-        private static bool Is64Bit()
-        {
-            return Environment.Is64BitOperatingSystem;
-        }
+        private static bool Is64Bit() => Environment.Is64BitOperatingSystem;
 
         /// <summary>
         /// Gets the bitness of the operating system.
         /// </summary>
-        private static int OperatingSystemBitness { get { return Is64Bit() ? 64 : 32; } }
+        private static int OperatingSystemBitness => Is64Bit() ? 64 : 32;
 
         /// <summary>
         /// Gets the name of the operating system.
         /// </summary>
-        private static string OperatingSystemName { get { return Environment.OSVersion.ToString(); } }
+        private static string OperatingSystemName => Environment.OSVersion.ToString();
 
         /// <summary>
         /// Gets the version of the current .NET common language runtime environment.
         /// </summary>
-        private static string DotNetClrVersion { get { return Environment.Version.ToString().Trim(); } }
+        private static string DotNetClrVersion => Environment.Version.ToString().Trim();
 
         /// <summary>
         /// Gets the version of the current .NET environment.
         /// </summary>
-        private static string DotNetVersion 
-        {
-            get
-            {
-                return Environment.Version.ToString();
-            }
-        }
+        private static string DotNetVersion => Environment.Version.ToString();
     }
 }

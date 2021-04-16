@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using Samples;
 using PayPalCheckoutSdk.Payments;
-using PayPalHttp;
 
-namespace Samples.AuthorizeIntentExamples
+namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
 {
     public class CaptureOrderSample
     {
@@ -28,6 +24,7 @@ namespace Samples.AuthorizeIntentExamples
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
+
                 Console.WriteLine("Response JSON: \n {0}", PayPalClient.ObjectToJSONString(result));
             }
 

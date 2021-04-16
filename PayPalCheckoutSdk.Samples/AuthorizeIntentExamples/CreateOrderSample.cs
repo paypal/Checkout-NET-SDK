@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using Samples;
 using PayPalCheckoutSdk.Orders;
-using PayPalHttp;
 
-using System.IO;
-using System.Text;
-using System.Runtime.Serialization.Json;
-
-namespace Samples.AuthorizeIntentExamples
+namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
 {
     public class CreateOrderSample
     {
         //Below function can be used to build the create order request body with complete payload.
         private static OrderRequest BuildRequestBody()
         {
-            OrderRequest orderRequest = new OrderRequest()
+            var orderRequest = new OrderRequest
             {
                 CheckoutPaymentIntent = "AUTHORIZE",
 
@@ -32,8 +25,9 @@ namespace Samples.AuthorizeIntentExamples
                 },
                 PurchaseUnits = new List<PurchaseUnitRequest>
                 {
-                    new PurchaseUnitRequest{
-                        ReferenceId =  "PUHF",
+                    new PurchaseUnitRequest
+                    {
+                        ReferenceId = "PUHF",
                         Description = "Sporting Goods",
                         CustomId = "CUST-HighFashions",
                         SoftDescriptor = "HighFashions",
@@ -133,7 +127,7 @@ namespace Samples.AuthorizeIntentExamples
         }
 
         //Below function can be used to create an order with complete payload.
-        public async static Task<HttpResponse> CreateOrder(bool debug=false)
+        public async static Task<HttpResponse> CreateOrder(bool debug = false)
         {
             Console.WriteLine("Creating Order with complete payload");
             var request = new OrdersCreateRequest();
@@ -147,21 +141,23 @@ namespace Samples.AuthorizeIntentExamples
                 Console.WriteLine("Order Id: {0}", result.Id);
                 Console.WriteLine("Intent: {0}", result.CheckoutPaymentIntent);
                 Console.WriteLine("Links:");
-                foreach(LinkDescription link in result.Links)
+                foreach (LinkDescription link in result.Links)
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
+
                 AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
                 Console.WriteLine("Total Amount: {0} {1}", amount.CurrencyCode, amount.Value);
                 Console.WriteLine("Response JSON: \n {0}", PayPalClient.ObjectToJSONString(result));
             }
+
             return response;
         }
 
         //Below function can be used to build the create order request body with minimum payload.
         private static OrderRequest BuildRequestBodyWithMinimumFields()
         {
-            OrderRequest orderRequest = new OrderRequest()
+            var orderRequest = new OrderRequest
             {
                 CheckoutPaymentIntent = "AUTHORIZE",
                 ApplicationContext = new ApplicationContext
@@ -171,13 +167,13 @@ namespace Samples.AuthorizeIntentExamples
                 },
                 PurchaseUnits = new List<PurchaseUnitRequest>
                 {
-                    new PurchaseUnitRequest{
+                    new PurchaseUnitRequest
+                    {
                         AmountWithBreakdown = new AmountWithBreakdown
                         {
                             CurrencyCode = "USD",
                             Value = "220.00"
                         }
-                        
                     }
                 }
             };
@@ -186,7 +182,7 @@ namespace Samples.AuthorizeIntentExamples
         }
 
         //Below function can be used to create an order with minimum payload.
-        public async static Task<HttpResponse> CreateOrderWithMinimumFields(bool debug=false)
+        public async static Task<HttpResponse> CreateOrderWithMinimumFields(bool debug = false)
         {
             Console.WriteLine("Create Order with minimum payload..");
             var request = new OrdersCreateRequest();
@@ -201,10 +197,11 @@ namespace Samples.AuthorizeIntentExamples
                 Console.WriteLine("Order Id: {0}", result.Id);
                 Console.WriteLine("Intent: {0}", result.CheckoutPaymentIntent);
                 Console.WriteLine("Links:");
-                foreach(LinkDescription link in result.Links)
+                foreach (LinkDescription link in result.Links)
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
+
                 AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
                 Console.WriteLine("Total Amount: {0} {1}", amount.CurrencyCode, amount.Value);
             }

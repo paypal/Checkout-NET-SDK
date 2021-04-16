@@ -4,8 +4,8 @@
 // @type object
 // @data H4sIAAAAAAAC/6SPQUvDQBCF7/6KYc5BPOcmbJAixKLFiwgZm6lZ2O6uM7PIIv3vUgMRCXjpcb7H8L73hbuaGVt8MrKi4NjIB8UGn0k8vQXu6XjOscF7rr+HY92Lz+ZTxBZ3E8M4v0I6gE0Me8pWhEfIVI8cDfSn4RobvBWhOvfeNPjIND7EULE9UFA+g4/ihccFbCVlFvOs2L4sxmri4/vaVJg0xT++C1pbzxF8TvU/a/AKw7br3aa/GyAJDK7rN50bLp0TSwin19PVNwAAAP//
 // DO NOT EDIT
+
 using System.Runtime.Serialization;
-using System.Collections.Generic;
 
 
 namespace PayPalCheckoutSdk.Payments
@@ -17,15 +17,16 @@ namespace PayPalCheckoutSdk.Payments
     public class StatusDetails
     {
         /// <summary>
-	    /// Required default constructor
-		/// </summary>
-        public StatusDetails() {}
+        /// Required default constructor
+        /// </summary>
+        public StatusDetails()
+        {
+        }
 
         /// <summary>
         /// The reason why the captured payment status is `PENDING` or `DENIED`.
         /// </summary>
-        [DataMember(Name="reason", EmitDefaultValue = false)]
-        public string Reason;
+        [field: DataMember(Name = "reason", EmitDefaultValue = false)]
+        public string Reason { get; set; } = null!;
     }
 }
-

@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using PayPalCheckoutSdk.Core;
+using PayPalCheckoutSdk.Extensions;
 using PayPalCheckoutSdk.Orders;
-using PayPalHttp;
 
-namespace Samples.CaptureIntentExamples
+namespace PayPalCheckoutSdk.Samples.CaptureIntentExamples
 {
     public class CreateOrderSample
     {
-       
         /*
             Method to generate sample create order body with <b>CAPTURE</b> intent
             
@@ -18,7 +15,7 @@ namespace Samples.CaptureIntentExamples
          */
         private static OrderRequest BuildRequestBody()
         {
-            OrderRequest orderRequest = new OrderRequest()
+            var orderRequest = new OrderRequest
             {
                 CheckoutPaymentIntent = "CAPTURE",
 
@@ -33,8 +30,9 @@ namespace Samples.CaptureIntentExamples
                 },
                 PurchaseUnits = new List<PurchaseUnitRequest>
                 {
-                    new PurchaseUnitRequest{
-                        ReferenceId =  "PUHF",
+                    new PurchaseUnitRequest
+                    {
+                        ReferenceId = "PUHF",
                         Description = "Sporting Goods",
                         CustomId = "CUST-HighFashions",
                         SoftDescriptor = "HighFashions",
@@ -143,7 +141,7 @@ namespace Samples.CaptureIntentExamples
         public async static Task<HttpResponse> CreateOrder(bool debug = false)
         {
             var request = new OrdersCreateRequest();
-            request.Headers.Add("prefer", "return=representation");
+            request.SetPreferReturn(EPreferReturn.Representation);
             request.RequestBody(BuildRequestBody());
             var response = await PayPalClient.client().Execute(request);
 
@@ -158,6 +156,7 @@ namespace Samples.CaptureIntentExamples
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
+
                 AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
                 Console.WriteLine("Total Amount: {0} {1}", amount.CurrencyCode, amount.Value);
                 Console.WriteLine("Response JSON: \n {0}", PayPalClient.ObjectToJSONString(result));
@@ -169,9 +168,9 @@ namespace Samples.CaptureIntentExamples
              This is the driver function which invokes the createOrder function to create
              an sample order.
         */
-         //static void Main(string[] args)
-         //{
-         //    CreateOrder(true).Wait();
-         //}
+        //static void Main(string[] args)
+        //{
+        //    CreateOrder(true).Wait();
+        //}
     }
 }

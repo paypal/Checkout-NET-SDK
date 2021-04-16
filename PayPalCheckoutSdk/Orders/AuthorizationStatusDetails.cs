@@ -4,8 +4,8 @@
 // @type object
 // @data H4sIAAAAAAAC/6SPQUsDQQxG7/6KkPMinvcmVESEtUjxItJGN3UD05kxySCj9L9LmbqgvQheXx7hfZ+4qpmxRyo+JZUPcklxbU5ebD2ykwTDDh9IhZ4DD7T7g33L9Shihwu2F5V8MLHH1cRwFCFtwSeG72c8Qqa64+jQPp5jh5eqVFvjRYf3TONdDBX7LQXjA3grojzOYKkps7qwYf84rzNXia+nO5TJUvxRPKPT7naC96n+7m69IAab5dWwuBmuN/+NjyWE/dP+7AsAAP//
 // DO NOT EDIT
+
 using System.Runtime.Serialization;
-using System.Collections.Generic;
 
 
 namespace PayPalCheckoutSdk.Orders
@@ -17,15 +17,16 @@ namespace PayPalCheckoutSdk.Orders
     public class AuthorizationStatusDetails
     {
         /// <summary>
-	    /// Required default constructor
-		/// </summary>
-        public AuthorizationStatusDetails() {}
+        /// Required default constructor
+        /// </summary>
+        public AuthorizationStatusDetails()
+        {
+        }
 
         /// <summary>
         /// The reason why the authorized status is `PENDING`.
         /// </summary>
-        [DataMember(Name="reason", EmitDefaultValue = false)]
-        public string Reason;
+        [DataMember(Name = "reason", EmitDefaultValue = false)]
+        public string Reason { get; set; } = null!;
     }
 }
-

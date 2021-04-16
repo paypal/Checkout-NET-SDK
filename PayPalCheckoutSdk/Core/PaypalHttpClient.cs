@@ -1,8 +1,6 @@
-using System.Threading.Tasks;
-using System.Net.Http.Headers;
-using PayPalHttp;
 namespace PayPalCheckoutSdk.Core
 {
+    /*
     public class PayPalHttpClient : HttpClient
     {
         private string refreshToken;
@@ -73,4 +71,5 @@ namespace PayPalCheckoutSdk.Core
             }
         }
     }
+    */
 }

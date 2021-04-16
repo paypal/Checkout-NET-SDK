@@ -1,12 +1,11 @@
 ﻿using System;
 using PayPalCheckoutSdk.Core;
-using PayPalHttp;
-
 using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Runtime.Serialization.Json;
 
-namespace Samples
+namespace PayPalCheckoutSdk.Samples
 {
     public class PayPalClient
     {
@@ -17,10 +16,9 @@ namespace Samples
         public static PayPalEnvironment environment()
         {
             return new SandboxEnvironment(
-                 System.Environment.GetEnvironmentVariable("PAYPAL_CLIENT_ID") != null ?
-                 System.Environment.GetEnvironmentVariable("PAYPAL_CLIENT_ID"):"<<PAYPAL-CLIENT-ID>>",
-                System.Environment.GetEnvironmentVariable("PAYPAL_CLIENT_SECRET") != null ?
-                 System.Environment.GetEnvironmentVariable("PAYPAL_CLIENT_SECRET"):"<<PAYPAL-CLIENT-SECRET>>");
+                Environment.GetEnvironmentVariable("PAYPAL_CLIENT_ID") ?? "<<PAYPAL-CLIENT-ID>>",
+                Environment.GetEnvironmentVariable("PAYPAL_CLIENT_SECRET") ?? "<<PAYPAL-CLIENT-SECRET>>"
+            );
         }
 
         /**
@@ -39,15 +37,18 @@ namespace Samples
         /**
             This method can be used to Serialize Object to JSON string.
         */
-        public static String ObjectToJSONString(Object serializableObject)
+        public static string ObjectToJSONString<T>(T serializableObject)
         {
-            MemoryStream memoryStream = new MemoryStream();
-            var writer = JsonReaderWriterFactory.CreateJsonWriter(
-                        memoryStream, Encoding.UTF8, true, true, "  ");
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(serializableObject.GetType(), new DataContractJsonSerializerSettings{UseSimpleDictionaryFormat = true});
+            using var memoryStream = new MemoryStream();
+            using var writer = JsonReaderWriterFactory.CreateJsonWriter(
+                memoryStream, Encoding.UTF8, true, true, "  "
+            );
+            var ser = new DataContractJsonSerializer(typeof(T), new DataContractJsonSerializerSettings {UseSimpleDictionaryFormat = true});
             ser.WriteObject(writer, serializableObject);
-            memoryStream.Position = 0;
-            StreamReader sr = new StreamReader(memoryStream);
+
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            using var sr = new StreamReader(memoryStream);
             return sr.ReadToEnd();
         }
     }
