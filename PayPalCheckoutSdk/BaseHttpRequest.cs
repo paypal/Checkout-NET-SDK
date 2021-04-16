@@ -7,9 +7,6 @@ namespace PayPalCheckoutSdk
 {
     public abstract class BaseHttpRequest
     {
-        public const string ApplicationJson = "application/json";
-        public const string ApplicationXForm = "application/x-www-form-urlencoded";
-
         public HttpMethod Method { get; }
 
         public string Path { get; protected set; }

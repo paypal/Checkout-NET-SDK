@@ -7,9 +7,9 @@ namespace PayPalCheckoutSdk.Core.Interfaces
 {
     public interface IPayPayEncoder
     {
-        HttpContent SerializeRequest<TRequestBody>(TRequestBody body, string contentType);
+        Task<HttpContent> SerializeRequestAsync<TRequestBody>(TRequestBody body, string contentType);
 
-        Task<TResponse> DeserializeResponse<TResponse>(
+        Task<TResponse> DeserializeResponseAsync<TResponse>(
             HttpContent httpContent,
             MediaTypeHeaderValue mediaTypeHeaderValue,
             CancellationToken cancellationToken = default

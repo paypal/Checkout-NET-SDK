@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace PayPalCheckoutSdk.Core
 {
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class PayPalHttpClient : IPayPalHttpClient
     {
         private readonly HttpClient _httpClient;
@@ -61,14 +62,14 @@ namespace PayPalCheckoutSdk.Core
             return httpRequest;
         }
 
-        protected virtual HttpContent CreateHttpContent<TRequest, TRequestBody>(
+        protected virtual async Task<HttpContent> CreateHttpContent<TRequest, TRequestBody>(
             TRequest request
         )
             where TRequest : BaseHttpRequest
         {
             if (request is IPayPalRequestWithRequestBody<TRequestBody> requestWithRequestBody)
             {
-                return _payPayEncoder.SerializeRequest(requestWithRequestBody.Body, requestWithRequestBody.ContentType);
+                return await _payPayEncoder.SerializeRequestAsync(requestWithRequestBody.Body, requestWithRequestBody.ContentType);
             }
 
             throw new ArgumentException($"The request {typeof(TRequest)} do not implement {typeof(IPayPalRequestWithRequestBody<TRequestBody>)}");
@@ -98,7 +99,7 @@ namespace PayPalCheckoutSdk.Core
 
                 if (response.Content.Headers.ContentType != null)
                 {
-                    responseBody = await _payPayEncoder.DeserializeResponse<TResponse>(
+                    responseBody = await _payPayEncoder.DeserializeResponseAsync<TResponse>(
                         response.Content,
                         response.Content.Headers.ContentType,
                         cancellationToken
@@ -128,7 +129,7 @@ namespace PayPalCheckoutSdk.Core
 
             if (request is IPayPalRequestWithRequestBody)
             {
-                using var httpContent = CreateHttpContent<TRequest, TRequestBody>(request);
+                using var httpContent = await CreateHttpContent<TRequest, TRequestBody>(request);
                 httpRequest.Content = httpContent;
             }
 
@@ -167,7 +168,7 @@ namespace PayPalCheckoutSdk.Core
 
             if (request is IPayPalRequestWithRequestBody)
             {
-                using var httpContent = CreateHttpContent<TRequest, TRequestBody>(request);
+                using var httpContent = await CreateHttpContent<TRequest, TRequestBody>(request);
                 httpRequest.Content = httpContent;
             }
 

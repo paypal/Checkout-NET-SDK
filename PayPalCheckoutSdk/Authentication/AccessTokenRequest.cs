@@ -1,4 +1,5 @@
 ﻿using PayPalCheckoutSdk.Configuration;
+using PayPalCheckoutSdk.Core.MessageSerializers;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -13,7 +14,7 @@ namespace PayPalCheckoutSdk.Authentication
         ) : base("/v1/oauth2/token", HttpMethod.Post)
         {
             Authorization = new AuthenticationHeaderValue("Basic", options.AuthorizationString());
-            ContentType = ApplicationXForm;
+            ContentType = FormEncodedSerializer.ApplicationXForm;
 
             var body = new Dictionary<string, string>
             {
