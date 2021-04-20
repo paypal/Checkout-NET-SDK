@@ -1,4 +1,5 @@
 using PayPal.Sdk.Checkout.RequestInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -36,10 +37,13 @@ namespace PayPal.Sdk.Checkout
         where TResponseType : notnull
         where TRequestBody : notnull
     {
+        public string PayPalRequestId { get; }
+
         public TRequestBody Body { get; private set; } = default!;
 
         protected BaseHttpRequest(string path, HttpMethod method) : base(path, method)
         {
+            PayPalRequestId = Guid.NewGuid().ToString();
         }
 
         // ReSharper disable once MemberCanBeProtected.Global
@@ -52,10 +56,13 @@ namespace PayPal.Sdk.Checkout
     public abstract class BaseVoidHttpRequest<TRequestBody> : BaseHttpRequest, IPayPalRequestWithRequestBody<TRequestBody>
         where TRequestBody : notnull
     {
+        public string PayPalRequestId { get; }
+
         public TRequestBody Body { get; private set; } = default!;
 
         protected BaseVoidHttpRequest(string path, HttpMethod method) : base(path, method)
         {
+            PayPalRequestId = Guid.NewGuid().ToString();
         }
 
         public void SetRequestBody(TRequestBody request)

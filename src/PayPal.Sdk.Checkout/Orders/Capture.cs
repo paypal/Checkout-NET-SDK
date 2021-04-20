@@ -51,7 +51,7 @@ namespace PayPal.Sdk.Checkout.Orders
         /// Indicates whether you can make additional captures against the authorized payment. Set to `true` if you do not intend to capture additional payments against the authorization. Set to `false` if you intend to capture additional payments against the authorization.
         /// </summary>
         [DataMember(Name = "final_capture", EmitDefaultValue = false)]
-        public bool? FinalCapture { get; set; } = null!;
+        public bool? FinalCapture { get; set; }
 
         /// <summary>
         /// The PayPal-generated ID for the captured payment.
@@ -87,7 +87,7 @@ namespace PayPal.Sdk.Checkout.Orders
         /// The status of the captured payment.
         /// </summary>
         [DataMember(Name = "status", EmitDefaultValue = false)]
-        public string Status { get; set; } = null!;
+        public ECaptureStatus Status { get; set; }
 
         /// <summary>
         /// The date and time, in [Internet date and time format](https://tools.ietf.org/html/rfc3339#section-5.6). Seconds are required while fractional seconds are optional.<blockquote><strong>Note:</strong> The regular expression provides guidance but does not reject all invalid dates.</blockquote>

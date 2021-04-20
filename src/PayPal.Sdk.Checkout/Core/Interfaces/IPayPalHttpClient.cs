@@ -1,11 +1,12 @@
 using PayPal.Sdk.Checkout.Authentication;
 using PayPal.Sdk.Checkout.Configuration;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PayPal.Sdk.Checkout.Core.Interfaces
 {
-    public interface IPayPalHttpClient
+    public interface IPayPalHttpClient : IDisposable
     {
         PayPalOptions GetPayPalOptions { get; }
 
@@ -21,7 +22,7 @@ namespace PayPal.Sdk.Checkout.Core.Interfaces
         Task<PayPalHttpResponse<TResponse>> ExecuteAsync<TRequest, TResponse>(
             TRequest request,
             AccessToken? accessToken,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default
         )
             where TRequest : BaseHttpRequest
             where TResponse : notnull;

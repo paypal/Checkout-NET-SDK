@@ -20,15 +20,23 @@ namespace PayPal.Sdk.Checkout.Core
 
         private readonly IOptions<PayPalOptions> _payPalOptions;
 
+        private readonly bool _leaveOpen;
+
+        /// <param name="httpClient"></param>
+        /// <param name="payPayEncoder"></param>
+        /// <param name="payPalOptions"></param>
+        /// <param name="leaveOpen">Mainly for test to call dispose on httpClient</param>
         public PayPalHttpClient(
             HttpClient httpClient,
             IPayPayEncoder payPayEncoder,
-            IOptions<PayPalOptions> payPalOptions
+            IOptions<PayPalOptions> payPalOptions,
+            bool leaveOpen = true
         )
         {
             _httpClient = httpClient;
             _payPayEncoder = payPayEncoder;
             _payPalOptions = payPalOptions;
+            _leaveOpen = leaveOpen;
         }
 
         public PayPalOptions GetPayPalOptions => _payPalOptions.Value;
@@ -58,6 +66,10 @@ namespace PayPal.Sdk.Checkout.Core
                 httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
             }
 
+            if (request is IPayPalRequestWithRequestBody palRequestWithRequestBody)
+            {
+                httpRequest.Headers.Add("PayPal-Request-Id", palRequestWithRequestBody.PayPalRequestId);
+            }
 
             return httpRequest;
         }
@@ -204,6 +216,23 @@ namespace PayPal.Sdk.Checkout.Core
             var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
 
             return await ProcessResponseAsync(response, cancellationToken);
+        }
+
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        private bool _disposed = false;
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                if (!_leaveOpen)
+                {
+                    _httpClient.Dispose();
+                }
+
+                _disposed = true;
+            }
         }
     }
 }
