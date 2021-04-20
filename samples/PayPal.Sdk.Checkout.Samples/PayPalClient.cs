@@ -13,7 +13,7 @@ namespace PayPal.Sdk.Checkout.Samples
         {
             var configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.AddJsonFile("appsettings.json5", optional: false, reloadOnChange: false);
-            configurationBuilder.AddJsonFile("user.appsettings.json5", optional: false, reloadOnChange: false);
+            configurationBuilder.AddJsonFile("user.appsettings.json5", optional: true, reloadOnChange: false);
 
             var configuration = configurationBuilder.Build();
 

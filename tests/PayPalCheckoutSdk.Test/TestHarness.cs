@@ -1,11 +1,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using PayPal.Sdk.Checkout.Configuration;
 using PayPal.Sdk.Checkout.Core;
 using PayPal.Sdk.Checkout.Core.Interfaces;
 using System;
-using System.Net.Http;
 using Xunit;
 
 [assembly: CollectionBehavior(MaxParallelThreads = -1)]
@@ -18,7 +16,8 @@ namespace PayPalCheckoutSdk.Test
         {
             var configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.AddJsonFile("appsettings.json5", optional: false, reloadOnChange: false);
-            configurationBuilder.AddJsonFile("user.appsettings.json5", optional: false, reloadOnChange: false);
+            configurationBuilder.AddJsonFile("user.appsettings.json5", optional: true, reloadOnChange: false);
+            configurationBuilder.AddEnvironmentVariables(prefix: "PAYPAL_");
 
             var configuration = configurationBuilder.Build();
 
