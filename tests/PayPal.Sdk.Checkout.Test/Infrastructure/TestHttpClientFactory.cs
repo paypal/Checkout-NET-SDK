@@ -1,15 +1,17 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PayPal.Sdk.Checkout.Configuration;
-using PayPal.Sdk.Checkout.Core;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Http;
+using Microsoft.Extensions.Logging;
 using PayPal.Sdk.Checkout.Core.Interfaces;
+using PayPal.Sdk.Checkout.Extensions;
 using System;
 using System.IO;
 using Xunit;
 
 [assembly: CollectionBehavior(MaxParallelThreads = -1)]
 
-namespace PayPal.Sdk.Checkout.Test
+namespace PayPal.Sdk.Checkout.Test.Infrastructure
 {
     public static class TestHttpClientFactory
     {
@@ -27,9 +29,20 @@ namespace PayPal.Sdk.Checkout.Test
 
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddHttpClient<IPayPalHttpClient, PayPalHttpClient>();
-            serviceCollection.AddScoped<IPayPayEncoder, PayPayEncoder>();
-            serviceCollection.Configure<PayPalOptions>(c => configuration.Bind(c));
+            serviceCollection.AddPayPalCheckout(c => configuration.Bind(c));
+
+            serviceCollection.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder
+                    .AddFilter("System.Net.Http.HttpClient.IPayPalHttpClient.RequestScope", LogLevel.Trace)
+                    .AddFilter("System.Net.Http.HttpClient.IPayPalHttpClient.RequestLogger", LogLevel.Trace);
+
+                loggingBuilder
+                    .AddDebug()
+                    .AddConsole();
+            });
+
+            serviceCollection.Replace(ServiceDescriptor.Singleton<IHttpMessageHandlerBuilderFilter, HttpClientLoggingFilter>());
 
             return serviceCollection.BuildServiceProvider();
         }

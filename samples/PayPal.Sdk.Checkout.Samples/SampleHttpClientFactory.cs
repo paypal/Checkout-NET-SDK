@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PayPal.Sdk.Checkout.Configuration;
-using PayPal.Sdk.Checkout.Core;
 using PayPal.Sdk.Checkout.Core.Interfaces;
+using PayPal.Sdk.Checkout.Extensions;
 using System;
 using System.IO;
 
@@ -23,9 +22,7 @@ namespace PayPal.Sdk.Checkout.Samples
 
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddHttpClient<IPayPalHttpClient, PayPalHttpClient>();
-            serviceCollection.AddScoped<IPayPayEncoder, PayPayEncoder>();
-            serviceCollection.Configure<PayPalOptions>(c => configuration.Bind(c));
+            serviceCollection.AddPayPalCheckout(c => configuration.Bind(c));
 
             return serviceCollection.BuildServiceProvider();
         }

@@ -4,6 +4,7 @@ using PayPal.Sdk.Checkout.Core;
 using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Orders;
+using PayPal.Sdk.Checkout.Test.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
