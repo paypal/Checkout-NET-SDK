@@ -1,27 +1,25 @@
 using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Orders;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace PayPalCheckoutSdk.Test.Orders
+namespace PayPal.Sdk.Checkout.Test.Orders
 {
     [Collection("Orders")]
-    public class OrdersCaptureTest
+    public class OrdersAuthorizeTest
     {
         [Theory(Skip = "This test is an example. In production, you will need payer approval")]
         [InlineData("ORDER-ID")]
-        public async Task TestOrdersCaptureRequest(string orderId)
+        public async void TestOrdersAuthorizeRequest(string orderId)
         {
             using var payPalHttpClient = TestHarness.CreateHttpClient();
 
             var accessToken = await payPalHttpClient.AuthenticateAsync();
 
-            var request = new OrdersCaptureRequest(orderId);
-            request.SetRequestBody(new OrderActionRequest());
+            var request = new OrdersAuthorizeRequest(orderId);
 
-            var response = await payPalHttpClient.ExecuteAsync<OrdersCaptureRequest, Order>(request, accessToken);
+            var response = await payPalHttpClient.ExecuteAsync<OrdersAuthorizeRequest, AuthorizeRequest, Order>(request, accessToken);
 
-            Assert.Equal(201, (int) response.ResponseStatusCode);
+            Assert.Equal(200, (int) response.ResponseStatusCode);
             Assert.NotNull(response.ResponseBody);
         }
     }

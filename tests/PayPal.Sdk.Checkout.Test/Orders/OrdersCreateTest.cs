@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace PayPalCheckoutSdk.Test.Orders
+namespace PayPal.Sdk.Checkout.Test.Orders
 {
     [Collection("Orders")]
     public class OrdersCreateTest

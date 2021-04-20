@@ -2,7 +2,7 @@ using PayPal.Sdk.Checkout.Extensions;
 using System.Net;
 using Xunit;
 
-namespace PayPalCheckoutSdk.Test.Orders
+namespace PayPal.Sdk.Checkout.Test.Orders
 {
     [Collection("Orders")]
     public class OrdersValidateTest

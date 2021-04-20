@@ -8,7 +8,7 @@ using Xunit;
 
 [assembly: CollectionBehavior(MaxParallelThreads = -1)]
 
-namespace PayPalCheckoutSdk.Test
+namespace PayPal.Sdk.Checkout.Test
 {
     public class TestHarness
     {

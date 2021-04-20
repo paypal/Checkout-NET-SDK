@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using Xunit;
 
-namespace PayPalCheckoutSdk.Test.Orders
+namespace PayPal.Sdk.Checkout.Test.Orders
 {
     [Collection("Orders")]
     public class OrdersPatchTest
