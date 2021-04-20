@@ -1,4 +1,4 @@
-using PayPalCheckoutSdk.Orders;
+using PayPal.Sdk.Checkout.Orders;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -42,7 +42,7 @@ namespace PayPalCheckoutSdk.Test.Orders
             return order;
         }
 
-        public async static Task<HttpResponse> CreateOrder()
+        public static async Task<HttpResponse> CreateOrder()
         {
             var request = new OrdersCreateRequest();
             request.Prefer("return=representation");

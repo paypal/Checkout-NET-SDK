@@ -1,4 +1,4 @@
-using PayPalCheckoutSdk.Orders;
+using PayPal.Sdk.Checkout.Orders;
 using System.Collections.Generic;
 using Xunit;
 

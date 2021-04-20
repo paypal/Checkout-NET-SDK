@@ -1,4 +1,4 @@
-using PayPalCheckoutSdk.Core;
+using PayPal.Sdk.Checkout.Core;
 using Xunit;
 
 [assembly: CollectionBehavior(MaxParallelThreads = -1)]

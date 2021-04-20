@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayPal.Sdk.Checkout", "src\PayPal.Sdk.Checkout\PayPal.Sdk.Checkout.csproj", "{E8BFB5AE-5411-42B7-B38D-2BCC275B5EFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayPalCheckoutSdk.Test", "PayPalCheckoutSdk.Test\PayPalCheckoutSdk.Test.csproj", "{EB4A7FDB-ACFE-4E36-B9E7-C6CAAF483ADE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayPalCheckoutSdk.Test", "tests\PayPalCheckoutSdk.Test\PayPalCheckoutSdk.Test.csproj", "{EB4A7FDB-ACFE-4E36-B9E7-C6CAAF483ADE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayPal.Sdk.Checkout.Samples", "samples\PayPal.Sdk.Checkout.Samples\PayPal.Sdk.Checkout.Samples.csproj", "{1ABBF171-0333-4E55-949A-139CB6FAA33C}"
 EndProject
