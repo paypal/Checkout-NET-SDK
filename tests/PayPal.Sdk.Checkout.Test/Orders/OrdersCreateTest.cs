@@ -4,6 +4,7 @@ using PayPal.Sdk.Checkout.Core;
 using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Orders;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
@@ -86,20 +87,15 @@ namespace PayPal.Sdk.Checkout.Test.Orders
             Assert.NotNull(createdOrder.CreateTime);
 
             Assert.NotNull(createdOrder.Links);
-            var foundApproveUrl = false;
-            foreach (var linkDescription in createdOrder.Links)
-            {
-                if (linkDescription.Rel == "approve")
-                {
-                    foundApproveUrl = true;
-                    Assert.NotNull(linkDescription.Href);
-                    Assert.Equal("GET", linkDescription.Method);
-                    _testOutputHelper.WriteLine(linkDescription.Href);
-                }
-            }
 
-            _testOutputHelper.WriteLine(createdOrder.Id);
-            Assert.True(foundApproveUrl);
+            Assert.Contains(createdOrder.Links, x => x.Rel == "approve");
+            var approveUrl = createdOrder.Links.First(x => x.Rel == "approve");
+            Assert.NotNull(approveUrl.Href);
+            Assert.Equal("GET", approveUrl.Method);
+
+            _testOutputHelper.WriteLine("OrderId: {0}", createdOrder.Id);
+            _testOutputHelper.WriteLine("ApproveUrl: {0}", approveUrl.Href);
+
             Assert.Equal(EOrderStatus.Created, createdOrder.Status);
         }
     }
