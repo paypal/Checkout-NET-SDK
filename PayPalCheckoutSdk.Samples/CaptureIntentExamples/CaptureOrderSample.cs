@@ -1,37 +1,35 @@
-﻿using System;
+﻿using PayPal.Sdk.Checkout.Authentication;
+using PayPal.Sdk.Checkout.Core;
+using PayPal.Sdk.Checkout.Extensions;
+using PayPal.Sdk.Checkout.Orders;
+using System;
 using System.Threading.Tasks;
-using PayPalCheckoutSdk.Extensions;
-using PayPalCheckoutSdk.Orders;
 
 namespace PayPalCheckoutSdk.Samples.CaptureIntentExamples
 {
-    public class CaptureOrderSample
+    public static class CaptureOrderSample
     {
         /*
             Method to capture order after creation. Valid approved order Id should be
 	         passed an argument to this method.
         */
-        public async static Task<HttpResponse> CaptureOrder(string OrderId, bool debug = false)
+        public static async Task<Order> CaptureOrder(this PayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
         {
-            var request = new OrdersCaptureRequest(OrderId);
-            request.SetPreferReturn(EPreferReturn.Representation);
-            request.RequestBody(new OrderActionRequest());
-            var response = await PayPalClient.client().Execute(request);
+            var response = await httpClient.CaptureOrderAsync(accessToken, orderId);
 
-            if (debug)
+            if (debug && response != null)
             {
-                var result = response.Result<Order>();
-                Console.WriteLine("Status: {0}", result.Status);
-                Console.WriteLine("Order Id: {0}", result.Id);
-                Console.WriteLine("Intent: {0}", result.CheckoutPaymentIntent);
+                Console.WriteLine("Status: {0}", response.Status);
+                Console.WriteLine("Order Id: {0}", response.Id);
+                Console.WriteLine("Intent: {0}", response.CheckoutPaymentIntent);
                 Console.WriteLine("Links:");
-                foreach (LinkDescription link in result.Links)
+                foreach (var link in response.Links)
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
 
                 Console.WriteLine("Capture Ids: ");
-                foreach (PurchaseUnit purchaseUnit in result.PurchaseUnits)
+                foreach (var purchaseUnit in response.PurchaseUnits)
                 {
                     foreach (var capture in purchaseUnit.Payments.Captures)
                     {
@@ -39,13 +37,13 @@ namespace PayPalCheckoutSdk.Samples.CaptureIntentExamples
                     }
                 }
 
-                AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
+                var amount = response.PurchaseUnits[0].AmountWithBreakdown;
                 Console.WriteLine("Buyer:");
                 Console.WriteLine("\tEmail Address: {0}\n\tName: {1} {2}\n",
-                    result.Payer.Email,
-                    result.Payer.Name.GivenName,
-                    result.Payer.Name.Surname);
-                Console.WriteLine("Response JSON:\n{0}", PayPalClient.ObjectToJSONString(result));
+                    response.Payer.Email,
+                    response.Payer.Name.GivenName,
+                    response.Payer.Name.Surname);
+                Console.WriteLine("Response JSON:\n{0}", response.AsJson());
             }
 
             return response;
@@ -53,7 +51,7 @@ namespace PayPalCheckoutSdk.Samples.CaptureIntentExamples
 
         /*
             Driver Function to invoke capture payment on order.
-            Order Id should be replaced with the valid approved order id. 
+            Order Id should be replaced with the valid approved order id.
         */
         //static void Main(string[] args)
         //{

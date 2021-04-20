@@ -1,18 +1,19 @@
-﻿using System;
+﻿using PayPal.Sdk.Checkout.Authentication;
+using PayPal.Sdk.Checkout.ContractEnums;
+using PayPal.Sdk.Checkout.Core;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PayPalCheckoutSdk.Extensions;
-using PayPalCheckoutSdk.Orders;
+using PayPal.Sdk.Checkout.Extensions;
+using PayPal.Sdk.Checkout.Orders;
 
 namespace PayPalCheckoutSdk.Samples.CaptureIntentExamples
 {
-    public class CreateOrderSample
+    public static class CreateOrderSample
     {
-        /*
-            Method to generate sample create order body with <b>CAPTURE</b> intent
-            
-            @return OrderRequest with created order request
-         */
+        /// <summary>
+        /// Method to generate sample create order body with <b>CAPTURE</b> intent
+        /// </summary>
         private static OrderRequest BuildRequestBody()
         {
             var orderRequest = new OrderRequest
@@ -30,7 +31,7 @@ namespace PayPalCheckoutSdk.Samples.CaptureIntentExamples
                 },
                 PurchaseUnits = new List<PurchaseUnitRequest>
                 {
-                    new PurchaseUnitRequest
+                    new()
                     {
                         ReferenceId = "PUHF",
                         Description = "Sporting Goods",
@@ -71,7 +72,7 @@ namespace PayPalCheckoutSdk.Samples.CaptureIntentExamples
                         },
                         Items = new List<Item>
                         {
-                            new Item
+                            new()
                             {
                                 Name = "T-shirt",
                                 Description = "Green XL",
@@ -89,7 +90,7 @@ namespace PayPalCheckoutSdk.Samples.CaptureIntentExamples
                                 Quantity = "1",
                                 Category = "PHYSICAL_GOODS"
                             },
-                            new Item
+                            new()
                             {
                                 Name = "Shoes",
                                 Description = "Running, Size 10.5",
@@ -131,35 +132,28 @@ namespace PayPalCheckoutSdk.Samples.CaptureIntentExamples
             return orderRequest;
         }
 
-        /*
-            Method to create order
-            
-            @param debug true = print response data
-            @return HttpResponse<Order> response received from API
-            @throws IOException Exceptions from API if any
-        */
-        public async static Task<HttpResponse> CreateOrder(bool debug = false)
+        public static async Task<Order> CreateOrder(this PayPalHttpClient httpClient, AccessToken accessToken, bool debug = false)
         {
-            var request = new OrdersCreateRequest();
-            request.SetPreferReturn(EPreferReturn.Representation);
-            request.RequestBody(BuildRequestBody());
-            var response = await PayPalClient.client().Execute(request);
-
-            if (debug)
+            var response = await httpClient.CreateOrderAsync(accessToken, request =>
             {
-                var result = response.Result<Order>();
-                Console.WriteLine("Status: {0}", result.Status);
-                Console.WriteLine("Order Id: {0}", result.Id);
-                Console.WriteLine("Intent: {0}", result.CheckoutPaymentIntent);
+                request.SetPreferReturn(EPreferReturn.Representation);
+                request.SetRequestBody(BuildRequestBody());
+            });
+
+            if (debug && response != null)
+            {
+                Console.WriteLine("Status: {0}", response.Status);
+                Console.WriteLine("Order Id: {0}", response.Id);
+                Console.WriteLine("Intent: {0}", response.CheckoutPaymentIntent);
                 Console.WriteLine("Links:");
-                foreach (LinkDescription link in result.Links)
+                foreach (var link in response.Links)
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
 
-                AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
+                var amount = response.PurchaseUnits[0].AmountWithBreakdown;
                 Console.WriteLine("Total Amount: {0} {1}", amount.CurrencyCode, amount.Value);
-                Console.WriteLine("Response JSON: \n {0}", PayPalClient.ObjectToJSONString(result));
+                Console.WriteLine("Response JSON: \n {0}", response.AsJson());
             }
 
             return response;

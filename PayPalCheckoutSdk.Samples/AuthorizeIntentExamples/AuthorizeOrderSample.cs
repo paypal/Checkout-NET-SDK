@@ -1,36 +1,46 @@
-﻿using System;
+﻿using PayPal.Sdk.Checkout.Authentication;
+using PayPal.Sdk.Checkout.ContractEnums;
+using PayPal.Sdk.Checkout.Core;
+using PayPal.Sdk.Checkout.Extensions;
+using System;
 using System.Threading.Tasks;
-using PayPalCheckoutSdk.Orders;
+using PayPal.Sdk.Checkout.Orders;
 
 namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
 {
-    public class AuthorizeOrderSample
+    public static class AuthorizeOrderSample
     {
-        //This function can be used to perform authorization on the approved order.
-        public async static Task<HttpResponse> AuthorizeOrder(string OrderId, bool debug = false)
+        /// <summary>
+        /// This function can be used to perform authorization on the approved order.
+        /// </summary>
+        public static async Task<Order> AuthorizeOrder(this PayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
         {
-            var request = new OrdersAuthorizeRequest(OrderId);
-            request.Prefer("return=representation");
-            request.RequestBody(new AuthorizeRequest());
-            var response = await PayPalClient.client().Execute(request);
+            var response = await httpClient.AuthorizeOrderAsync(
+                accessToken,
+                orderId,
+                request =>
+                {
+                    request.SetPreferReturn(EPreferReturn.Representation);
+                    request.SetRequestBody(new AuthorizeRequest());
+                }
+            );
 
-            if (debug)
+            if (debug && response != null)
             {
-                var result = response.Result<Order>();
-                Console.WriteLine("Status: {0}", result.Status);
-                Console.WriteLine("Order Id: {0}", result.Id);
-                Console.WriteLine("Authorization Id: {0}", result.PurchaseUnits[0].Payments.Authorizations[0].Id);
-                Console.WriteLine("Intent: {0}", result.CheckoutPaymentIntent);
+                Console.WriteLine("Status: {0}", response.Status);
+                Console.WriteLine("Order Id: {0}", response.Id);
+                Console.WriteLine("Authorization Id: {0}", response.PurchaseUnits[0].Payments.Authorizations[0].Id);
+                Console.WriteLine("Intent: {0}", response.CheckoutPaymentIntent);
                 Console.WriteLine("Links:");
-                foreach (LinkDescription link in result.Links)
+                foreach (var link in response.Links)
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
 
-                AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
+                var amount = response.PurchaseUnits[0].AmountWithBreakdown;
                 Console.WriteLine("Buyer:");
-                Console.WriteLine("\tEmail Address: {0}", result.Payer.Email);
-                Console.WriteLine("Response JSON: \n {0}", PayPalClient.ObjectToJSONString(result));
+                Console.WriteLine("\tEmail Address: {0}", response.Payer.Email);
+                Console.WriteLine("Response JSON: \n {0}", response.AsJson());
             }
 
             return response;

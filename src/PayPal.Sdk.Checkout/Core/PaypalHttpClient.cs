@@ -129,7 +129,7 @@ namespace PayPal.Sdk.Checkout.Core
             AccessToken? accessToken,
             CancellationToken cancellationToken
         )
-            where TRequest : BaseHttpRequest<TRequestBody>
+            where TRequest : BaseHttpRequest<TResponse, TRequestBody>
             where TRequestBody : notnull
             where TResponse : notnull
         {

@@ -1,13 +1,19 @@
-﻿using System;
+﻿using PayPal.Sdk.Checkout.Authentication;
+using PayPal.Sdk.Checkout.ContractEnums;
+using PayPal.Sdk.Checkout.Core;
+using PayPal.Sdk.Checkout.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PayPalCheckoutSdk.Orders;
+using PayPal.Sdk.Checkout.Orders;
 
 namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
 {
-    public class CreateOrderSample
+    public static class CreateOrderSample
     {
-        //Below function can be used to build the create order request body with complete payload.
+        /// <summary>
+        /// Below function can be used to build the create order request body with complete payload.
+        /// </summary>
         private static OrderRequest BuildRequestBody()
         {
             var orderRequest = new OrderRequest
@@ -25,7 +31,7 @@ namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
                 },
                 PurchaseUnits = new List<PurchaseUnitRequest>
                 {
-                    new PurchaseUnitRequest
+                    new()
                     {
                         ReferenceId = "PUHF",
                         Description = "Sporting Goods",
@@ -66,7 +72,7 @@ namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
                         },
                         Items = new List<Item>
                         {
-                            new Item
+                            new()
                             {
                                 Name = "T-shirt",
                                 Description = "Green XL",
@@ -84,7 +90,7 @@ namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
                                 Quantity = "1",
                                 Category = "PHYSICAL_GOODS"
                             },
-                            new Item
+                            new()
                             {
                                 Name = "Shoes",
                                 Description = "Running, Size 10.5",
@@ -126,35 +132,40 @@ namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
             return orderRequest;
         }
 
-        //Below function can be used to create an order with complete payload.
-        public async static Task<HttpResponse> CreateOrder(bool debug = false)
+        /// <summary>
+        /// Below function can be used to create an order with complete payload.
+        /// </summary>
+        public static async Task<Order> CreateOrder(this PayPalHttpClient httpClient, AccessToken accessToken, bool debug = false)
         {
             Console.WriteLine("Creating Order with complete payload");
-            var request = new OrdersCreateRequest();
-            request.Prefer("return=representation");
-            request.RequestBody(BuildRequestBody());
-            var response = await PayPalClient.client().Execute(request);
-            var result = response.Result<Order>();
-            if (debug)
+            var response = await httpClient.CreateOrderAsync(accessToken, request =>
             {
-                Console.WriteLine("Status: {0}", result.Status);
-                Console.WriteLine("Order Id: {0}", result.Id);
-                Console.WriteLine("Intent: {0}", result.CheckoutPaymentIntent);
+                request.SetPreferReturn(EPreferReturn.Representation);
+                request.SetRequestBody(BuildRequestBody());
+            });
+
+            if (debug && response != null)
+            {
+                Console.WriteLine("Status: {0}", response.Status);
+                Console.WriteLine("Order Id: {0}", response.Id);
+                Console.WriteLine("Intent: {0}", response.CheckoutPaymentIntent);
                 Console.WriteLine("Links:");
-                foreach (LinkDescription link in result.Links)
+                foreach (var link in response.Links)
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
 
-                AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
+                var amount = response.PurchaseUnits[0].AmountWithBreakdown;
                 Console.WriteLine("Total Amount: {0} {1}", amount.CurrencyCode, amount.Value);
-                Console.WriteLine("Response JSON: \n {0}", PayPalClient.ObjectToJSONString(result));
+                Console.WriteLine("Response JSON: \n {0}", response.AsJson());
             }
 
             return response;
         }
 
-        //Below function can be used to build the create order request body with minimum payload.
+        /// <summary>
+        /// Below function can be used to build the create order request body with minimum payload.
+        /// </summary>
         private static OrderRequest BuildRequestBodyWithMinimumFields()
         {
             var orderRequest = new OrderRequest
@@ -167,7 +178,7 @@ namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
                 },
                 PurchaseUnits = new List<PurchaseUnitRequest>
                 {
-                    new PurchaseUnitRequest
+                    new()
                     {
                         AmountWithBreakdown = new AmountWithBreakdown
                         {
@@ -181,28 +192,30 @@ namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
             return orderRequest;
         }
 
-        //Below function can be used to create an order with minimum payload.
-        public async static Task<HttpResponse> CreateOrderWithMinimumFields(bool debug = false)
+        /// <summary>
+        /// Below function can be used to create an order with minimum payload.
+        /// </summary>
+        public static async Task<Order> CreateOrderWithMinimumFields(this PayPalHttpClient httpClient, AccessToken accessToken, bool debug = false)
         {
             Console.WriteLine("Create Order with minimum payload..");
-            var request = new OrdersCreateRequest();
-            request.Headers.Add("prefer", "return=representation");
-            request.RequestBody(BuildRequestBodyWithMinimumFields());
-            var response = await PayPalClient.client().Execute(request);
-
-            if (debug)
+            var response = await httpClient.CreateOrderAsync(accessToken, request =>
             {
-                var result = response.Result<Order>();
-                Console.WriteLine("Status: {0}", result.Status);
-                Console.WriteLine("Order Id: {0}", result.Id);
-                Console.WriteLine("Intent: {0}", result.CheckoutPaymentIntent);
+                request.SetPreferReturn(EPreferReturn.Representation);
+                request.SetRequestBody(BuildRequestBodyWithMinimumFields());
+            });
+
+            if (debug && response != null)
+            {
+                Console.WriteLine("Status: {0}", response.Status);
+                Console.WriteLine("Order Id: {0}", response.Id);
+                Console.WriteLine("Intent: {0}", response.CheckoutPaymentIntent);
                 Console.WriteLine("Links:");
-                foreach (LinkDescription link in result.Links)
+                foreach (var link in response.Links)
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
 
-                AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
+                var amount = response.PurchaseUnits[0].AmountWithBreakdown;
                 Console.WriteLine("Total Amount: {0} {1}", amount.CurrencyCode, amount.Value);
             }
 

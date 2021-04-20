@@ -1,26 +1,29 @@
-﻿using System;
+﻿using PayPal.Sdk.Checkout.Authentication;
+using PayPal.Sdk.Checkout.Core;
+using PayPal.Sdk.Checkout.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PayPalCheckoutSdk.Orders;
+using PayPal.Sdk.Checkout.Orders;
 
 namespace PayPalCheckoutSdk.Samples
 {
-    public class PatchOrderSample
+    public static class PatchOrderSample
     {
         /**
             This method can be used to build the patch request body.
          */
-        private static List<Patch<Object>> BuildPatchRequest()
+        private static List<Patch<string>> BuildPatches()
         {
-            var patches = new List<Patch<Object>>
+            var patches = new List<Patch<string>>
             {
-                new Patch<Object>
+                new()
                 {
                     Op = "replace",
                     Path = "/intent",
                     Value = "CAPTURE"
                 },
-                new Patch<Object>
+                new()
                 {
                     Op = "replace",
                     Path = "/purchase_units/@reference_id=='PUHF'/description",
@@ -33,29 +36,34 @@ namespace PayPalCheckoutSdk.Samples
         /*
             This method cn be used to patch an order by passing the order id.
          */
-        public async static Task<HttpResponse> PatchOrder(string orderId, bool debug = false)
+        public static async Task<Order> PatchOrder(this PayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
         {
-            var request = new OrdersPatchRequest<Object>(orderId);
-            request.RequestBody(BuildPatchRequest());
-            var response = await PayPalClient.client().Execute(request);
-            if (debug)
+            await httpClient.OrdersPatchRequestAsync(
+                accessToken,
+                orderId,
+                BuildPatches()
+            );
+
+            var response = await httpClient.GetOrderAsync(
+                accessToken,
+                orderId
+            );
+
+            if (debug && response != null)
             {
-                var ordersGetRequest = new OrdersGetRequest(orderId);
-                response = await PayPalClient.client().Execute(ordersGetRequest);
-                var result = response.Result<Order>();
                 Console.WriteLine("Retrieved Order Status After Patch");
-                Console.WriteLine("Status: {0}", result.Status);
-                Console.WriteLine("Order Id: {0}", result.Id);
-                Console.WriteLine("Intent: {0}", result.CheckoutPaymentIntent);
+                Console.WriteLine("Status: {0}", response.Status);
+                Console.WriteLine("Order Id: {0}", response.Id);
+                Console.WriteLine("Intent: {0}", response.CheckoutPaymentIntent);
                 Console.WriteLine("Links:");
-                foreach (LinkDescription link in result.Links)
+                foreach (var link in response.Links)
                 {
                     Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
                 }
 
-                AmountWithBreakdown amount = result.PurchaseUnits[0].AmountWithBreakdown;
+                var amount = response.PurchaseUnits[0].AmountWithBreakdown;
                 Console.WriteLine("Total Amount: {0} {1}", amount.CurrencyCode, amount.Value);
-                Console.WriteLine("Response JSON: \n {0}", PayPalClient.ObjectToJSONString(result));
+                Console.WriteLine("Response JSON: \n {0}", response.AsJson());
             }
 
             return response;
@@ -64,7 +72,7 @@ namespace PayPalCheckoutSdk.Samples
         /*
             This is the driver method which invokes the patchOrder function with Order Id
             to patch an order details.
-        
+
             To get the new Order id, we are using the createOrder to create new order
             and then we are using the newly created order id.
          */

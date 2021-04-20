@@ -1,37 +1,14 @@
-﻿using System;
-using PayPalCheckoutSdk.Core;
+﻿using PayPal.Sdk.Checkout.Core;
 using System.IO;
-using System.Net.Http;
-using System.Text;
 using System.Runtime.Serialization.Json;
+using System.Text;
 
 namespace PayPalCheckoutSdk.Samples
 {
     public class PayPalClient
     {
-        /**
-            Setting up PayPal environment with credentials with sandbox cerdentails. 
-            For Live, this should be LiveEnvironment Instance. 
-         */
-        public static PayPalEnvironment environment()
+        public static PayPalHttpClient CreateHttpClient()
         {
-            return new SandboxEnvironment(
-                Environment.GetEnvironmentVariable("PAYPAL_CLIENT_ID") ?? "<<PAYPAL-CLIENT-ID>>",
-                Environment.GetEnvironmentVariable("PAYPAL_CLIENT_SECRET") ?? "<<PAYPAL-CLIENT-SECRET>>"
-            );
-        }
-
-        /**
-            Returns PayPalHttpClient instance which can be used to invoke PayPal API's.
-         */
-        public static HttpClient client()
-        {
-            return new PayPalHttpClient(environment());
-        }
-
-        public static HttpClient client(string refreshToken)
-        {
-            return new PayPalHttpClient(environment(), refreshToken);
         }
 
         /**
