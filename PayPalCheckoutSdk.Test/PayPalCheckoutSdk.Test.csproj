@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PayPalCheckoutSdk\PayPalCheckoutSdk.csproj" />
+    <ProjectReference Include="..\src\PayPal.Sdk.Checkout\PayPal.Sdk.Checkout.csproj" />
   </ItemGroup>
 
 </Project>

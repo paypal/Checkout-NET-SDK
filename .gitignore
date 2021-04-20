@@ -1,5 +1,5 @@
 .idea
-PayPalCheckoutSdk.sln.DotSettings.user
+*.sln.DotSettings.user
 
-*/obj/
-*/bin/
+**/obj/
+**/bin/
