@@ -1,4 +1,4 @@
-﻿using PayPal.Sdk.Checkout.Configuration;
+using PayPal.Sdk.Checkout.Configuration;
 using PayPal.Sdk.Checkout.Core.MessageSerializers;
 using System.Collections.Generic;
 using System.Net.Http;

@@ -12,7 +12,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D1E21CBF-79CE-4FA1-97BF-939BE0E9DD79}"
 	ProjectSection(SolutionItems) = preProject
 		README.MD = README.MD
+		.config\dotnet-tools.json = .config\dotnet-tools.json
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GithubWorkflows", "GithubWorkflows", "{7DF6DE1B-F6ED-4AC7-8D75-1A95E6EF3390}"
+ProjectSection(SolutionItems) = preProject
+	.github\workflows\build.yml = .github\workflows\build.yml
+	.github\workflows\nightly-release.yml = .github\workflows\nightly-release.yml
+	.github\workflows\pr-build.yml = .github\workflows\pr-build.yml
+	.github\workflows\release.yml = .github\workflows\release.yml
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,5 +72,8 @@ Global
 		{1ABBF171-0333-4E55-949A-139CB6FAA33C}.Release|x64.Build.0 = Release|Any CPU
 		{1ABBF171-0333-4E55-949A-139CB6FAA33C}.Release|x86.ActiveCfg = Release|Any CPU
 		{1ABBF171-0333-4E55-949A-139CB6FAA33C}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7DF6DE1B-F6ED-4AC7-8D75-1A95E6EF3390} = {D1E21CBF-79CE-4FA1-97BF-939BE0E9DD79}
 	EndGlobalSection
 EndGlobal

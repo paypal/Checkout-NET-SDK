@@ -1,4 +1,4 @@
-﻿using PayPal.Sdk.Checkout.Authentication;
+using PayPal.Sdk.Checkout.Authentication;
 using PayPal.Sdk.Checkout.Core;
 using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Orders;
