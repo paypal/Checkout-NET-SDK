@@ -167,7 +167,7 @@ namespace PayPal.Sdk.Checkout.Extensions
 
             configureRequest?.Invoke(request);
 
-            return await payPalHttpClient.ExecuteVoidAsync(request, accessToken, cancellationToken);
+            return await payPalHttpClient.ExecuteVoidAsync<OrdersPatchRequest<TPatch>, ICollection<Patch<TPatch>>>(request, accessToken, cancellationToken);
         }
 
         public static Task OrdersPatchRequestAsync<TPatch>(

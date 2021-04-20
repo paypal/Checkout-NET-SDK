@@ -15,7 +15,9 @@ using System.Net.Http;
 namespace PayPal.Sdk.Checkout.Orders
 {
     /// <summary>
-    /// Authorizes payment for an order. The response shows details of authorizations. You can make this call only if you specified `intent=AUTHORIZE` in the create order call.
+    /// Authorizes payment for an order. To successfully authorize payment for an order,
+    /// the buyer must first approve the order or a valid payment_source must be provided in the request.
+    /// A buyer can approve the order upon being redirected to the rel:approve URL that was returned in the HATEOAS links in the create order response.
     /// </summary>
     public class OrdersAuthorizeRequest : BaseHttpRequest<Order, AuthorizeRequest>, IConfigurePrefer, IConfigurePayPalRequestId, IConfigurePayPalMetadataId
     {

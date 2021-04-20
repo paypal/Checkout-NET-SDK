@@ -193,13 +193,18 @@ namespace PayPal.Sdk.Checkout.Core
         {
             var httpRequest = CreateHttpRequest(request, accessToken);
 
+            HttpResponseMessage response;
             if (request is IPayPalRequestWithRequestBody)
             {
                 using var httpContent = await CreateHttpContent<TRequest, TRequestBody>(request);
                 httpRequest.Content = httpContent;
-            }
 
-            var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+                response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+            }
+            else
+            {
+                response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+            }
 
             return await ProcessResponseAsync(response, cancellationToken);
         }

@@ -9,16 +9,27 @@ namespace PayPal.Sdk.Checkout.Test.Orders
     [Collection("Orders")]
     public class OrdersCaptureTest
     {
-        [Theory(Skip = "This test is an example. In production, you will need payer approval")]
-        [InlineData("ORDER-ID")]
-        public async Task TestOrdersCaptureRequest(string orderId)
+        [Fact(Skip = "This test is an example. In production, you will need a credit card")]
+        public async Task TestOrdersCaptureRequest()
         {
             using var payPalHttpClient = TestHttpClientFactory.CreateHttpClient();
 
             var accessToken = await payPalHttpClient.AuthenticateAsync();
 
-            var request = new OrdersCaptureRequest(orderId);
-            request.SetRequestBody(new OrderActionRequest());
+            Assert.NotNull(accessToken);
+
+            var orderResponse = await OrdersCreateTest.CreateOrder(payPalHttpClient, accessToken!);
+            var createdOrder = orderResponse.ResponseBody!;
+
+            var request = new OrdersCaptureRequest(createdOrder.Id);
+            request.SetRequestBody(new OrderActionRequest
+            {
+                PaymentSource = new PaymentSource
+                {
+                    Card = new Card { },
+                    Token = new Token { },
+                }
+            });
 
             var response = await payPalHttpClient.ExecuteAsync<OrdersCaptureRequest, Order>(request, accessToken);
 
