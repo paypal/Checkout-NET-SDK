@@ -61,7 +61,7 @@ namespace PayPal.Sdk.Checkout.Test.Orders
         [Fact]
         public async void TestOrdersCreateRequest()
         {
-            using var payPalHttpClient = TestHarness.CreateHttpClient();
+            using var payPalHttpClient = TestHttpClientFactory.CreateHttpClient();
 
             var accessToken = await payPalHttpClient.AuthenticateAsync();
 

@@ -28,4 +28,9 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettings.json5" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
+    <Content Update="*.appsettings.json5" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
 </Project>

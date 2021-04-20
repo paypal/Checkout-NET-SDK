@@ -12,7 +12,7 @@ namespace PayPal.Sdk.Checkout.Test.Orders
         [InlineData("ORDER-ID")]
         public async Task TestOrdersCaptureRequest(string orderId)
         {
-            using var payPalHttpClient = TestHarness.CreateHttpClient();
+            using var payPalHttpClient = TestHttpClientFactory.CreateHttpClient();
 
             var accessToken = await payPalHttpClient.AuthenticateAsync();
 

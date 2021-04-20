@@ -9,7 +9,7 @@ namespace PayPal.Sdk.Checkout.Samples.AuthorizeIntentExamples
         //Rename to Main1 => Main
         private static async Task Main()
         {
-            var payPalHttpClient = PayPalClient.CreateHttpClient();
+            var payPalHttpClient = SampleHttpClientFactory.CreateHttpClient();
 
             var accessToken = await payPalHttpClient.AuthenticateAsync();
 
