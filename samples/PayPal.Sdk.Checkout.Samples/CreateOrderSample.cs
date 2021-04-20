@@ -1,4 +1,4 @@
-using PayPal.Sdk.Checkout.Authentication;
+﻿using PayPal.Sdk.Checkout.Authentication;
 using PayPal.Sdk.Checkout.ContractEnums;
 using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Extensions;
@@ -18,8 +18,7 @@ namespace PayPal.Sdk.Checkout.Samples
         {
             var orderRequest = new OrderRequest
             {
-                CheckoutPaymentIntent = "AUTHORIZE",
-
+                CheckoutPaymentIntent = EOrderIntent.Authorize,
                 ApplicationContext = new ApplicationContext
                 {
                     BrandName = "EXAMPLE INC",
@@ -170,7 +169,7 @@ namespace PayPal.Sdk.Checkout.Samples
         {
             var orderRequest = new OrderRequest
             {
-                CheckoutPaymentIntent = "AUTHORIZE",
+                CheckoutPaymentIntent = EOrderIntent.Authorize,
                 ApplicationContext = new ApplicationContext
                 {
                     CancelUrl = "https://www.example.com",

@@ -15,7 +15,7 @@ Please refer to the [PayPal Checkout Integration Guide](https://developer.paypal
 
 ## Prerequisites
 
-.NET Core 3.1 OR .Net Standard 2.1
+.NET Core 3.1, .NET 5.0, or .Net Standard 2.1
 
 An environment which supports TLS 1.2 (see the TLS-update site for more information)
 
@@ -25,43 +25,54 @@ An environment which supports TLS 1.2 (see the TLS-update site for more informat
 Get client ID and client secret by going to https://developer.paypal.com/developer/applications and generating a REST API app. Get <b>Client ID</b> and <b>Secret</b> from there.
 
 ## Examples
+
+## Configure library
+
+```c#
+void Configure(IServiceCollection serviceCollection)
+{
+    serviceCollection.AddPayPalCheckout(c => configuration.GetSection("MyAppSettingSection").Bind(c));
+}
+```
+
 ### Creating an Order
 This will create an order and print order id for the created order
 
-```cs
-public async static Task<HttpResponse> createOrder()
+```c#
+public async static Task<Order> CreateOrder(IPayPalHttpClient payPalHttpClient, AccessToken accessToken)
 {
-    HttpResponse response;
     // Construct a request object and set desired parameters
     // Here, OrdersCreateRequest() creates a POST request to /v2/checkout/orders
-    var order = new OrderRequest() {
-        CheckoutPaymentIntent = "CAPTURE",
-        PurchaseUnits = new List<PurchaseUnitRequest>()
+    var order = new OrderRequest
+    {
+        CheckoutPaymentIntent = EOrderIntent.Capture,
+        PurchaseUnits = new PurchaseUnitRequest[]
         {
-            new PurchaseUnitRequest()
+            new()
             {
-                Amount = new AmountWithBreakdown()
+                ReferenceId = "test_ref_id1",
+                AmountWithBreakdown = new AmountWithBreakdown
                 {
                     CurrencyCode = "USD",
                     Value = "100.00"
                 }
             }
         },
-        ApplicationContext = new ApplicationContext()
+        ApplicationContext = new ApplicationContext
         {
             ReturnUrl = "https://www.example.com",
             CancelUrl = "https://www.example.com"
         },
     };
 
+    var response = await payPalHttpClient.CreateOrderRawAsync(accessToken, request =>
+    {
+        request.SetPreferReturn(EPreferReturn.Representation);
+        request.SetRequestBody(order);
+    });
 
-    // Call API with your client and get a response for your call
-    var request = new OrdersCreateRequest();
-    request.Prefer("return=representation");
-    request.RequestBody(order);
-    response = await client().Execute(request);
-    var statusCode = response.StatusCode;
-    Order result = response.Result<Order>();
+    var statusCode = response.ResponseStatusCode;
+    var result = response.ResponseBody;
     Console.WriteLine("Status: {0}", result.Status);
     Console.WriteLine("Order Id: {0}", result.Id);
     Console.WriteLine("Intent: {0}", result.Intent);
@@ -70,22 +81,23 @@ public async static Task<HttpResponse> createOrder()
     {
          Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
     }
-    return response;
+    return response.ResponseBody;
 }
 ```
 
 ### Capturing an Order
 Before capturing an order, order should be approved by the buyer using the approve link in create order response
-```cs
-public async static Task<HttpResponse> captureOrder()
+```c#
+public async static Task<Order> CaptureOrder(this IPayPalHttpClient payPalHttpClient, AccessToken accessToken, string orderId)
 {
-    // Construct a request object and set desired parameters
-    // Replace ORDER-ID with the approved order id from create order
-    var request = new OrdersCaptureRequest("APPROVED-ORDER-ID");
-    request.RequestBody(new OrderActionRequest());
-    HttpResponse response = await client().Execute(request);
-    var statusCode = response.StatusCode;
-    Order result = response.Result<Order>();
+    var response = await payPalHttpClient.CaptureOrderAsync(accessToken, orderId,
+        request => {
+            request.SetRequestBody(new OrderActionRequest());
+        }
+    );
+
+    var statusCode = response.ResponseStatusCode;
+    var result = response.ResponseBody;
     Console.WriteLine("Status: {0}", result.Status);
     Console.WriteLine("Capture Id: {0}", result.Id);
     return response;
@@ -94,7 +106,7 @@ public async static Task<HttpResponse> captureOrder()
 ## Running tests
 
 To run integration tests using your client id and secret, run the `test`
-```sh
+```shell
 PAYPAL_ClientId=YOUR_SANDBOX_CLIENT_ID PAYPAL_ClientSecret=YOUR_SANDBOX_CLIENT_SECRET dotnet test
 ```
 
@@ -105,7 +117,7 @@ You may use the client id and secret above for demonstration purposes.
 
 You can start off by trying out [creating and capturing an order](/samples/PayPal.Sdk.Checkout.Samples/CaptureIntentExamples/RunAllCaptureIntentFlow.cs).
 
-To try out different samples for both create and authorize intent head to [this link](/Samples).
+To try out different samples for both create and authorize intent head to [this link](/samples/PayPal.Sdk.Checkout.Samples).
 
 Note: Update the `PayPal.Sdk.Checkout.Test` with your sandbox client credentials or pass your client credentials as environment variable while executing the samples.
 

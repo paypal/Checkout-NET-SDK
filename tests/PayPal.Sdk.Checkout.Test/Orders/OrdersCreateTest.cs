@@ -27,7 +27,7 @@ namespace PayPal.Sdk.Checkout.Test.Orders
         {
             var order = new OrderRequest
             {
-                CheckoutPaymentIntent = "CAPTURE",
+                CheckoutPaymentIntent = EOrderIntent.Capture,
                 PurchaseUnits = new PurchaseUnitRequest[]
                 {
                     new()

@@ -34,7 +34,7 @@ namespace PayPal.Sdk.Checkout.Orders
         /// The intent to either capture payment immediately or authorize a payment for an order after order creation.
         /// </summary>
         [DataMember(Name = "intent", EmitDefaultValue = false)]
-        public string CheckoutPaymentIntent { get; set; } = null!;
+        public EOrderIntent CheckoutPaymentIntent { get; set; }
 
         /// <summary>
         /// The customer who approves and pays for the order. The customer is also known as the payer.

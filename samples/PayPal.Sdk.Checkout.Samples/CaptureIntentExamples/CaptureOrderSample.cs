@@ -1,4 +1,4 @@
-using PayPal.Sdk.Checkout.Authentication;
+﻿using PayPal.Sdk.Checkout.Authentication;
 using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Orders;
@@ -13,9 +13,9 @@ namespace PayPal.Sdk.Checkout.Samples.CaptureIntentExamples
             Method to capture order after creation. Valid approved order Id should be
 	         passed an argument to this method.
         */
-        public static async Task<Order?> CaptureOrder(this IPayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
+        public static async Task<Order?> CaptureOrder(this IPayPalHttpClient payPalHttpClient, AccessToken accessToken, string orderId, bool debug = false)
         {
-            var response = await httpClient.CaptureOrderAsync(accessToken, orderId);
+            var response = await payPalHttpClient.CaptureOrderAsync(accessToken, orderId);
 
             if (debug && response != null)
             {

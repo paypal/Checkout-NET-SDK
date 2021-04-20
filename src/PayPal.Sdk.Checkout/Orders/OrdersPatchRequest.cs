@@ -15,7 +15,17 @@ using System.Collections.Generic;
 namespace PayPal.Sdk.Checkout.Orders
 {
     /// <summary>
-    /// Updates an order that has the `CREATED` or `APPROVED` status. You cannot update an order with `COMPLETED` status. You can patch these attributes and objects:<table><thead><tr><th align="left">Attribute or object</th><th align="left">Operations</th></tr></thead><tbody><tr><td><code>intent</code></td><td align="left">Replace</td></tr><tr><td><code>purchase_units</code></td><td align="left">Replace, add</td></tr><tr><td><code>purchase_units[].custom_id</code></td><td align="left">Replace, add, remove</td></tr><tr><td><code>purchase_units[].description</code></td><td align="left">Replace, add, remove</td></tr><tr><td><code>purchase_units[].payee.email</code></td><td align="left">Replace, add</td></tr><tr><td><code>purchase_units[].shipping</code></td><td align="left">Replace, add, remove</td></tr><tr><td><code>purchase_units[].soft_descriptor</code></td><td align="left">Replace, add, remove</td></tr><tr><td><code>purchase_units[].amount</code></td><td align="left">Replace</td></tr><tr><td><code>purchase_units[].invoice_id</code></td><td align="left">Replace, add, remove</td></tr></tbody></table>
+    /// Updates an order that has the `CREATED` or `APPROVED` status. You cannot update an order with `COMPLETED` status.
+    /// You can patch these attributes and objects:
+    /// <table><thead><tr><th align="left">Attribute or object</th><th align="left">Operations</th></tr></thead>
+    /// <tbody><tr><td><code>intent</code></td><td align="left">Replace</td></tr>
+    /// <tr><td><code>purchase_units</code></td><td align="left">Replace, add</td></tr>
+    /// <tr><td><code>purchase_units[].custom_id</code></td><td align="left">Replace, add, remove</td></tr>
+    /// <tr><td><code>purchase_units[].description</code></td><td align="left">Replace, add, remove</td></tr>
+    /// <tr><td><code>purchase_units[].payee.email</code></td><td align="left">Replace, add</td></tr>
+    /// <tr><td><code>purchase_units[].shipping</code></td><td align="left">Replace, add, remove</td></tr>
+    /// <tr><td><code>purchase_units[].soft_descriptor</code></td><td align="left">Replace, add, remove</td></tr>
+    /// <tr><td><code>purchase_units[].amount</code></td><td align="left">Replace</td></tr><tr><td><code>purchase_units[].invoice_id</code></td><td align="left">Replace, add, remove</td></tr></tbody></table>
     /// </summary>
     public class OrdersPatchRequest<T> : BaseVoidHttpRequest<ICollection<Patch<T>>>
     {
