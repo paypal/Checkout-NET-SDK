@@ -8,6 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\PayPal.Sdk.Checkout\PayPal.Sdk.Checkout.csproj" />
+    <ProjectReference Include="..\..\src\PayPal.Sdk.Checkout\PayPal.Sdk.Checkout.csproj" />
   </ItemGroup>
 </Project>
