@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using PayPal.Sdk.Checkout.Orders;
 
-namespace PayPalCheckoutSdk.Samples.AuthorizeIntentExamples
+namespace PayPal.Sdk.Checkout.Samples.AuthorizeIntentExamples
 {
     public static class AuthorizeOrderSample
     {

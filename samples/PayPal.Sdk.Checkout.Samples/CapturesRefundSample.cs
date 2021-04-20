@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Payments;
 
-namespace PayPalCheckoutSdk.Samples
+namespace PayPal.Sdk.Checkout.Samples
 {
     public static class CapturesRefundSample
     {

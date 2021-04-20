@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using PayPal.Sdk.Checkout.Orders;
 
-namespace PayPalCheckoutSdk.Samples
+namespace PayPal.Sdk.Checkout.Samples
 {
     public static class GetOrderSample
     {

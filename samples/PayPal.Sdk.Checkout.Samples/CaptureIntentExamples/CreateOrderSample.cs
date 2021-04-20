@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Orders;
 
-namespace PayPalCheckoutSdk.Samples.CaptureIntentExamples
+namespace PayPal.Sdk.Checkout.Samples.CaptureIntentExamples
 {
     public static class CreateOrderSample
     {

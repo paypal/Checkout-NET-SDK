@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace PayPalCheckoutSdk.Samples
+namespace PayPal.Sdk.Checkout.Samples
 {
     public class PayPalClient
     {

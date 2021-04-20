@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PayPalCheckoutSdk.Samples
+namespace PayPal.Sdk.Checkout.Samples
 {
     public static class ObjectExtensions
     {
