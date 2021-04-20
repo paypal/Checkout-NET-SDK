@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <VersionPrefix>1.0.0</VersionPrefix>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PayPal.Sdk.Checkout\PayPal.Sdk.Checkout.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
@@ -14,8 +19,20 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\PayPal.Sdk.Checkout\PayPal.Sdk.Checkout.csproj" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.14" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

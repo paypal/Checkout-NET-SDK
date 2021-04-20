@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -68,7 +69,7 @@ namespace PayPal.Sdk.Checkout.Core.MessageSerializers
             using var streamReader = new StreamReader(stream);
             using var jsonTextReader = new JsonTextReader(streamReader);
 
-            return serializer.Deserialize<TResponse>(jsonTextReader);
+            return serializer.Deserialize<TResponse>(jsonTextReader) ?? throw new NullReferenceException("Deserialize of the HttpContent is null");
         }
     }
 }

@@ -1,0 +1,7 @@
+﻿{
+  "Environment": "Sandbox",
+  "ClientId": "",
+  "ClientSecret": "",
+  "Timeout": "00:00:30.0",
+  "SendPayPalUserAgentHeader": true,
+}
