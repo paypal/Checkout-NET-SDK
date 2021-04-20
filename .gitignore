@@ -1,5 +1,6 @@
 .idea
 *.sln.DotSettings.user
+formatDiagnosticLog.binlog
 
 **/obj/
 **/bin/

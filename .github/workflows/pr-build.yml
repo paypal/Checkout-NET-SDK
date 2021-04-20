@@ -1,0 +1,47 @@
+name: PR CI Build
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-20.04
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+    steps:
+      - name: Setup .Net Core 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - name: Setup .Net Core 5.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+      - uses: actions/checkout@v2
+      - name: Build & test
+        run: |
+          dotnet build --configuration Release
+          dotnet test --nologo --no-build --configuration Release
+
+  code-style:
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .Net Core 3.1.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - name: Setup .Net Core 5.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+      - name: Tool restore with .Net Core
+        run: dotnet tool restore
+      - name: .Net Format
+        run: dotnet format --check -v diag

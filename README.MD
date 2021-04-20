@@ -1,5 +1,10 @@
 ﻿# REST API SDK for Dotnet V2
 
+[![Build Status](https://github.com/aviationexam/PayPal.Sdk.Checkout/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/aviationexam/PayPal.Sdk.Checkout/actions/workflows/build.yml)
+[![NuGet](https://img.shields.io/nuget/v/aviationexam/PayPal.Sdk.Checkout.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/aviationexam/PayPal.Sdk.Checkout/)
+[![MyGet](https://img.shields.io/myget/paypal-sdk-checkout/vpre/aviationexam/PayPal.Sdk.Checkout?label=MyGet)](https://www.myget.org/feed/paypal-sdk-checkout/package/nuget/aviationexam/PayPal.Sdk.Checkout)
+
+
 ![Home Image](homepage.jpg)
 
 __Welcome to PayPal Dotnet SDK__. This repository contains PayPal's Dotnet SDK and samples for [v2/checkout/orders](https://developer.paypal.com/docs/api/orders/v2/) and [v2/payments](https://developer.paypal.com/docs/api/payments/v2/) APIs.
@@ -102,7 +107,7 @@ You can start off by trying out [creating and capturing an order](/samples/PayPa
 
 To try out different samples for both create and authorize intent head to [this link](/Samples).
 
-Note: Update the `PayPalCheckoutSdk.Test` with your sandbox client credentials or pass your client credentials as environment variable while executing the samples.
+Note: Update the `PayPal.Sdk.Checkout.Test` with your sandbox client credentials or pass your client credentials as environment variable while executing the samples.
 
 
 ## License
