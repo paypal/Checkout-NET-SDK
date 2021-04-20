@@ -5,9 +5,9 @@ namespace PayPal.Sdk.Checkout.Configuration
 {
     public class PayPalOptions
     {
-        public string SandboxEndpoint { get; set; } = "https://api-m.paypal.com";
+        public string LiveEndpoint { get; set; } = "https://api-m.paypal.com";
 
-        public string LiveEndpoint { get; set; } = "https://api-m.sandbox.paypal.com";
+        public string SandboxEndpoint { get; set; } = "https://api-m.sandbox.paypal.com";
 
         public EPayPalEnvironment Environment { get; set; } = EPayPalEnvironment.Sandbox;
 
