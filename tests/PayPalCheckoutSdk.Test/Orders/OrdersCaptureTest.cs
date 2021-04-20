@@ -1,4 +1,6 @@
+using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Orders;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace PayPalCheckoutSdk.Test.Orders
@@ -6,17 +8,21 @@ namespace PayPalCheckoutSdk.Test.Orders
     [Collection("Orders")]
     public class OrdersCaptureTest
     {
-        [Fact(Skip = "This test is an example. In production, you will need payer approval")]
-        public async void TestOrdersCaptureRequest()
+        [Theory(Skip = "This test is an example. In production, you will need payer approval")]
+        [InlineData("ORDER-ID")]
+        public async Task TestOrdersCaptureRequest(string orderId)
         {
-            var orderResponse = await OrdersCreateTest.CreateOrder();
-            var orderId = orderResponse.Result<Order>().Id;
-            var request = new OrdersCaptureRequest(orderId);
-            request.RequestBody(new OrderActionRequest());
+            using var payPalHttpClient = TestHarness.CreateHttpClient();
 
-            var response = await TestHarness.client().Execute(request);
-            Assert.Equal(201, (int) response.StatusCode);
-            Assert.NotNull(response.Result<Order>());
+            var accessToken = await payPalHttpClient.AuthenticateAsync();
+
+            var request = new OrdersCaptureRequest(orderId);
+            request.SetRequestBody(new OrderActionRequest());
+
+            var response = await payPalHttpClient.ExecuteAsync<OrdersCaptureRequest, Order>(request, accessToken);
+
+            Assert.Equal(201, (int) response.ResponseStatusCode);
+            Assert.NotNull(response.ResponseBody);
         }
     }
 }

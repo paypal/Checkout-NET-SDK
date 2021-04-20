@@ -1,4 +1,6 @@
+using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Orders;
+using System.Net;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -17,15 +19,22 @@ namespace PayPalCheckoutSdk.Test.Orders
         [Fact]
         public async void TestOrdersGetRequest()
         {
-            var response = await OrdersCreateTest.CreateOrder();
-            Order createdOrder = response.Result<Order>();
+            using var payPalHttpClient = TestHarness.CreateHttpClient();
 
-            var request = new OrdersGetRequest(createdOrder.Id);
+            var accessToken = await payPalHttpClient.AuthenticateAsync();
 
-            response = await TestHarness.client().Execute(request);
-            Assert.Equal(200, (int) response.StatusCode);
-            Order retrievedOrder = response.Result<Order>();
+            Assert.NotNull(accessToken);
+
+            var orderResponse = await OrdersCreateTest.CreateOrder(payPalHttpClient, accessToken!);
+            var createdOrder = orderResponse.ResponseBody;
+
+            var getOrderResponse = await payPalHttpClient.GetOrderRawAsync(accessToken!, createdOrder!.Id);
+
+            Assert.Equal(HttpStatusCode.OK, getOrderResponse.ResponseStatusCode);
+
+            var retrievedOrder = getOrderResponse.ResponseBody!;
             Assert.NotNull(retrievedOrder);
+
             Assert.Equal(retrievedOrder.Id, createdOrder.Id);
             Assert.NotNull(retrievedOrder.PurchaseUnits);
             Assert.Equal(retrievedOrder.PurchaseUnits.Count, createdOrder.PurchaseUnits.Count);
@@ -45,7 +54,7 @@ namespace PayPalCheckoutSdk.Test.Orders
             var foundApproveUrl = false;
             foreach (var linkDescription in createdOrder.Links)
             {
-                if ("approve".Equals(linkDescription.Rel))
+                if (linkDescription.Rel == "approve")
                 {
                     foundApproveUrl = true;
                     Assert.NotNull(linkDescription.Href);
@@ -56,7 +65,7 @@ namespace PayPalCheckoutSdk.Test.Orders
 
             _testOutputHelper.WriteLine(createdOrder.Id);
             Assert.True(foundApproveUrl);
-            Assert.Equal("CREATED", createdOrder.Status);
+            Assert.Equal(EOrderStatus.Created, createdOrder.Status);
         }
     }
 }

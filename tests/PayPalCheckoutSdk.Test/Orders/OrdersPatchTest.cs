@@ -1,5 +1,7 @@
+using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Orders;
 using System.Collections.Generic;
+using System.Net;
 using Xunit;
 
 namespace PayPalCheckoutSdk.Test.Orders
@@ -7,9 +9,9 @@ namespace PayPalCheckoutSdk.Test.Orders
     [Collection("Orders")]
     public class OrdersPatchTest
     {
-        private List<Patch<string>> buildRequestBody()
+        private ICollection<Patch<string>> BuildRequestBody()
         {
-            return new List<Patch<string>>
+            return new[]
             {
                 new Patch<string>
                 {
@@ -23,18 +25,28 @@ namespace PayPalCheckoutSdk.Test.Orders
         [Fact]
         public async void TestOrdersPatchRequest()
         {
-            var response = await OrdersCreateTest.CreateOrder();
-            Order createdOrder = response.Result<Order>();
-            var request = new OrdersPatchRequest<string>(createdOrder.Id);
-            request.RequestBody(buildRequestBody());
+            using var payPalHttpClient = TestHarness.CreateHttpClient();
 
-            response = await TestHarness.client().Execute(request);
-            Assert.Equal(204, (int) response.StatusCode);
+            var accessToken = await payPalHttpClient.AuthenticateAsync();
 
-            response = await TestHarness.client().Execute(new OrdersGetRequest(createdOrder.Id));
-            Assert.Equal(200, (int) response.StatusCode);
+            Assert.NotNull(accessToken);
 
-            Order getOrder = response.Result<Order>();
+            var response = await OrdersCreateTest.CreateOrder(payPalHttpClient, accessToken!);
+            var createdOrder = response.ResponseBody!;
+
+            var patchResponse = await payPalHttpClient.OrdersPatchRequestRawAsync(
+                accessToken!,
+                createdOrder.Id,
+                BuildRequestBody()
+            );
+
+            Assert.Equal(HttpStatusCode.NoContent, patchResponse.ResponseStatusCode);
+
+            var getOrderResponse = await payPalHttpClient.GetOrderRawAsync(accessToken!, createdOrder!.Id);
+
+            Assert.Equal(HttpStatusCode.OK, getOrderResponse.ResponseStatusCode);
+
+            var getOrder = getOrderResponse.ResponseBody!;
 
             var firstPurchaseUnit = getOrder.PurchaseUnits[0];
             Assert.Equal("test_ref_id1", firstPurchaseUnit.ReferenceId);

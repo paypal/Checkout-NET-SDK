@@ -1,5 +1,10 @@
+using PayPal.Sdk.Checkout.Authentication;
+using PayPal.Sdk.Checkout.ContractEnums;
+using PayPal.Sdk.Checkout.Core;
+using PayPal.Sdk.Checkout.Core.Interfaces;
+using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Orders;
-using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -21,9 +26,9 @@ namespace PayPalCheckoutSdk.Test.Orders
             var order = new OrderRequest
             {
                 CheckoutPaymentIntent = "CAPTURE",
-                PurchaseUnits = new List<PurchaseUnitRequest>
+                PurchaseUnits = new PurchaseUnitRequest[]
                 {
-                    new PurchaseUnitRequest
+                    new()
                     {
                         ReferenceId = "test_ref_id1",
                         AmountWithBreakdown = new AmountWithBreakdown
@@ -37,29 +42,39 @@ namespace PayPalCheckoutSdk.Test.Orders
                 {
                     ReturnUrl = "https://www.example.com",
                     CancelUrl = "https://www.example.com"
-                }
+                },
             };
             return order;
         }
 
-        public static async Task<HttpResponse> CreateOrder()
+        public static async Task<PayPalHttpResponse<Order>> CreateOrder(IPayPalHttpClient payPalHttpClient, AccessToken accessToken)
         {
-            var request = new OrdersCreateRequest();
-            request.Prefer("return=representation");
-            request.RequestBody(BuildRequestBody());
-            return await TestHarness.client().Execute(request);
+            var response = await payPalHttpClient.CreateOrderRawAsync(accessToken, request =>
+            {
+                request.SetPreferReturn(EPreferReturn.Representation);
+                request.SetRequestBody(BuildRequestBody());
+            });
+
+            return response;
         }
 
         [Fact]
         public async void TestOrdersCreateRequest()
         {
-            var response = await CreateOrder();
+            using var payPalHttpClient = TestHarness.CreateHttpClient();
 
-            Assert.Equal(201, (int) response.StatusCode);
-            Assert.NotNull(response.Result<Order>());
+            var accessToken = await payPalHttpClient.AuthenticateAsync();
 
-            Order createdOrder = response.Result<Order>();
-            Assert.NotNull(createdOrder.Id);
+            Assert.NotNull(accessToken);
+
+            var response = await CreateOrder(payPalHttpClient, accessToken!);
+
+            Assert.Equal(HttpStatusCode.Created, response.ResponseStatusCode);
+            Assert.NotNull(response.ResponseBody);
+
+            var createdOrder = response.ResponseBody;
+            Assert.NotNull(createdOrder);
+            Assert.NotNull(createdOrder!.Id);
             Assert.NotNull(createdOrder.PurchaseUnits);
             Assert.Single(createdOrder.PurchaseUnits);
 
@@ -74,7 +89,7 @@ namespace PayPalCheckoutSdk.Test.Orders
             var foundApproveUrl = false;
             foreach (var linkDescription in createdOrder.Links)
             {
-                if ("approve".Equals(linkDescription.Rel))
+                if (linkDescription.Rel == "approve")
                 {
                     foundApproveUrl = true;
                     Assert.NotNull(linkDescription.Href);
@@ -85,7 +100,7 @@ namespace PayPalCheckoutSdk.Test.Orders
 
             _testOutputHelper.WriteLine(createdOrder.Id);
             Assert.True(foundApproveUrl);
-            Assert.Equal("CREATED", createdOrder.Status);
+            Assert.Equal(EOrderStatus.Created, createdOrder.Status);
         }
     }
 }

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
     <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <VersionPrefix>1.0.0</VersionPrefix>
   </PropertyGroup>
