@@ -23,74 +23,74 @@ Get client ID and client secret by going to https://developer.paypal.com/develop
 ### Creating an Order
 This will create an order and print order id for the created order
 
-```dotnet
+```cs
 public async static Task<HttpResponse> createOrder()
- {
-         HttpResponse response;
-        // Construct a request object and set desired parameters
-        // Here, OrdersCreateRequest() creates a POST request to /v2/checkout/orders
-        var order = new OrderRequest() {
-                CheckoutPaymentIntent = "CAPTURE",
-                PurchaseUnits = new List<PurchaseUnitRequest>()
-                {
-                    new PurchaseUnitRequest()
-                    {
-                        Amount = new AmountWithBreakdown()
-                        {
-                            CurrencyCode = "USD",
-                            Value = "100.00"
-                        }
-                    }
-                },
-                ApplicationContext = new ApplicationContext()
-                {
-                    ReturnUrl = "https://www.example.com",
-                    CancelUrl = "https://www.example.com"
-                }
-            };
-
-
-            // Call API with your client and get a response for your call
-            var request = new OrdersCreateRequest();
-            request.Prefer("return=representation");
-            request.RequestBody(order);
-            response = await client().Execute(request);
-            var statusCode = response.StatusCode;
-            Order result = response.Result<Order>();
-            Console.WriteLine("Status: {0}", result.Status);
-            Console.WriteLine("Order Id: {0}", result.Id);
-            Console.WriteLine("Intent: {0}", result.Intent);
-            Console.WriteLine("Links:");
-            foreach (LinkDescription link in result.Links)
+{
+    HttpResponse response;
+    // Construct a request object and set desired parameters
+    // Here, OrdersCreateRequest() creates a POST request to /v2/checkout/orders
+    var order = new OrderRequest() {
+        CheckoutPaymentIntent = "CAPTURE",
+        PurchaseUnits = new List<PurchaseUnitRequest>()
+        {
+            new PurchaseUnitRequest()
             {
-                 Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
+                Amount = new AmountWithBreakdown()
+                {
+                    CurrencyCode = "USD",
+                    Value = "100.00"
+                }
             }
-            return response;
+        },
+        ApplicationContext = new ApplicationContext()
+        {
+            ReturnUrl = "https://www.example.com",
+            CancelUrl = "https://www.example.com"
+        },
+    };
+
+
+    // Call API with your client and get a response for your call
+    var request = new OrdersCreateRequest();
+    request.Prefer("return=representation");
+    request.RequestBody(order);
+    response = await client().Execute(request);
+    var statusCode = response.StatusCode;
+    Order result = response.Result<Order>();
+    Console.WriteLine("Status: {0}", result.Status);
+    Console.WriteLine("Order Id: {0}", result.Id);
+    Console.WriteLine("Intent: {0}", result.Intent);
+    Console.WriteLine("Links:");
+    foreach (LinkDescription link in result.Links)
+    {
+         Console.WriteLine("\t{0}: {1}\tCall Type: {2}", link.Rel, link.Href, link.Method);
     }
+    return response;
+}
 ```
 
 ### Capturing an Order
 Before capturing an order, order should be approved by the buyer using the approve link in create order response
-```dotnet
-  public async static Task<HttpResponse> captureOrder()
-    {
-            // Construct a request object and set desired parameters
-            // Replace ORDER-ID with the approved order id from create order
-            var request = new OrdersCaptureRequest("APPROVED-ORDER-ID");
-            request.RequestBody(new OrderActionRequest());
-            HttpResponse response = await client().Execute(request);
-            var statusCode = response.StatusCode;
-            Order result = response.Result<Order>();
-            Console.WriteLine("Status: {0}", result.Status);
-            Console.WriteLine("Capture Id: {0}", result.Id);
-            return response;
-    }
+```cs
+public async static Task<HttpResponse> captureOrder()
+{
+    // Construct a request object and set desired parameters
+    // Replace ORDER-ID with the approved order id from create order
+    var request = new OrdersCaptureRequest("APPROVED-ORDER-ID");
+    request.RequestBody(new OrderActionRequest());
+    HttpResponse response = await client().Execute(request);
+    var statusCode = response.StatusCode;
+    Order result = response.Result<Order>();
+    Console.WriteLine("Status: {0}", result.Status);
+    Console.WriteLine("Capture Id: {0}", result.Id);
+    return response;
+}
 ```
 ## Running tests
 
-To run integration tests using your client id and secret, run the `test` gradle command with the `-Pintegration` flag
+To run integration tests using your client id and secret, run the `test`
 ```sh
-$ PAYPAL_CLIENT_ID=YOUR_SANDBOX_CLIENT_ID PAYPAL_CLIENT_SECRET=YOUR_SANDBOX_CLIENT_SECRET dotnet test -v normal
+PAYPAL_ClientId=YOUR_SANDBOX_CLIENT_ID PAYPAL_ClientSecret=YOUR_SANDBOX_CLIENT_SECRET dotnet test
 ```
 
 You may use the client id and secret above for demonstration purposes.
@@ -98,12 +98,12 @@ You may use the client id and secret above for demonstration purposes.
 
 ## Samples
 
-You can start off by trying out [creating and capturing an order](/Samples/CaptureIntentExamples/RunAllCaptureIntentFlow.cs).
+You can start off by trying out [creating and capturing an order](/samples/PayPal.Sdk.Checkout.Samples/CaptureIntentExamples/RunAllCaptureIntentFlow.cs).
 
 To try out different samples for both create and authorize intent head to [this link](/Samples).
 
-Note: Update the `PayPalClient.cs` with your sandbox client credentials or pass your client credentials as environment variable while executing the samples.
+Note: Update the `PayPalCheckoutSdk.Test` with your sandbox client credentials or pass your client credentials as environment variable while executing the samples.
 
 
 ## License
-Code released under [SDK LICENSE](LICENSE)  
+Code released under [SDK LICENSE](LICENSE)
