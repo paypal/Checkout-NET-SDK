@@ -1,10 +1,10 @@
 ﻿using PayPal.Sdk.Checkout.Authentication;
 using PayPal.Sdk.Checkout.ContractEnums;
-using PayPal.Sdk.Checkout.Core;
+using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Extensions;
+using PayPal.Sdk.Checkout.Orders;
 using System;
 using System.Threading.Tasks;
-using PayPal.Sdk.Checkout.Orders;
 
 namespace PayPal.Sdk.Checkout.Samples.AuthorizeIntentExamples
 {
@@ -13,7 +13,7 @@ namespace PayPal.Sdk.Checkout.Samples.AuthorizeIntentExamples
         /// <summary>
         /// This function can be used to perform authorization on the approved order.
         /// </summary>
-        public static async Task<Order> AuthorizeOrder(this PayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
+        public static async Task<Order?> AuthorizeOrder(this IPayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
         {
             var response = await httpClient.AuthorizeOrderAsync(
                 accessToken,

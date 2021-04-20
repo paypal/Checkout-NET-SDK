@@ -1,10 +1,10 @@
 ﻿using PayPal.Sdk.Checkout.Authentication;
 using PayPal.Sdk.Checkout.ContractEnums;
-using PayPal.Sdk.Checkout.Core;
-using System;
-using System.Threading.Tasks;
+using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Payments;
+using System;
+using System.Threading.Tasks;
 
 namespace PayPal.Sdk.Checkout.Samples
 {
@@ -13,7 +13,7 @@ namespace PayPal.Sdk.Checkout.Samples
         /// <summary>
         /// Method for refund the capture. Valid capture Id should be passed an argument to this method.
         /// </summary>
-        public static async Task<Refund> CapturesRefund(this PayPalHttpClient httpClient, AccessToken accessToken, string captureId, bool debug = false)
+        public static async Task<Refund?> CapturesRefund(this IPayPalHttpClient httpClient, AccessToken accessToken, string captureId, bool debug = false)
         {
             var response = await httpClient.CapturesRefundAsync(
                 accessToken,

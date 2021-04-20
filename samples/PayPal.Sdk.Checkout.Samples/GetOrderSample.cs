@@ -1,9 +1,9 @@
 ﻿using PayPal.Sdk.Checkout.Authentication;
-using PayPal.Sdk.Checkout.Core;
+using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Extensions;
+using PayPal.Sdk.Checkout.Orders;
 using System;
 using System.Threading.Tasks;
-using PayPal.Sdk.Checkout.Orders;
 
 namespace PayPal.Sdk.Checkout.Samples
 {
@@ -12,7 +12,7 @@ namespace PayPal.Sdk.Checkout.Samples
         /// <summary>
         /// This method cn be used to retrieve an order by passing the order id.
         /// </summary>
-        public static async Task<Order> GetOrder(this PayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
+        public static async Task<Order?> GetOrder(this IPayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
         {
             var response = await httpClient.GetOrderAsync(
                 accessToken,

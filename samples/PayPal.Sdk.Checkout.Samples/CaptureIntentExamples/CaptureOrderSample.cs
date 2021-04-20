@@ -1,5 +1,5 @@
 ﻿using PayPal.Sdk.Checkout.Authentication;
-using PayPal.Sdk.Checkout.Core;
+using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Extensions;
 using PayPal.Sdk.Checkout.Orders;
 using System;
@@ -13,7 +13,7 @@ namespace PayPal.Sdk.Checkout.Samples.CaptureIntentExamples
             Method to capture order after creation. Valid approved order Id should be
 	         passed an argument to this method.
         */
-        public static async Task<Order> CaptureOrder(this PayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
+        public static async Task<Order?> CaptureOrder(this IPayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
         {
             var response = await httpClient.CaptureOrderAsync(accessToken, orderId);
 
@@ -42,7 +42,9 @@ namespace PayPal.Sdk.Checkout.Samples.CaptureIntentExamples
                 Console.WriteLine("\tEmail Address: {0}\n\tName: {1} {2}\n",
                     response.Payer.Email,
                     response.Payer.Name.GivenName,
-                    response.Payer.Name.Surname);
+                    response.Payer.Name.Surname
+                );
+                Console.WriteLine("Amount: {0}", amount);
                 Console.WriteLine("Response JSON:\n{0}", response.AsJson());
             }
 

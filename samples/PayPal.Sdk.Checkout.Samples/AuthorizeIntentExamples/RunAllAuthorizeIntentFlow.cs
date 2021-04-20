@@ -7,16 +7,16 @@ namespace PayPal.Sdk.Checkout.Samples.AuthorizeIntentExamples
     public static class RunAllAuthorizeIntentFlow
     {
         //Rename to Main1 => Main
-        private static async Task Main(string[] args)
+        private static async Task Main()
         {
             var payPalHttpClient = PayPalClient.CreateHttpClient();
 
             var accessToken = await payPalHttpClient.AuthenticateAsync();
 
             Console.WriteLine("Running Authorize Intent Flow..");
-            var createOrderResponse = await payPalHttpClient.CreateOrder(accessToken);
+            var createOrderResponse = await payPalHttpClient.CreateOrder(accessToken!);
 
-            Console.WriteLine("Status: {0}", createOrderResponse.Status);
+            Console.WriteLine("Status: {0}", createOrderResponse!.Status);
             Console.WriteLine("Order Id: {0}", createOrderResponse.Id);
             Console.WriteLine("Intent: {0}", createOrderResponse.CheckoutPaymentIntent);
             Console.WriteLine("Links:");
@@ -32,9 +32,9 @@ namespace PayPal.Sdk.Checkout.Samples.AuthorizeIntentExamples
             Console.Read();
 
             Console.WriteLine("Authorizing the Order....");
-            var authorizeOrderResponse = await payPalHttpClient.AuthorizeOrder(accessToken, createOrderResponse.Id);
+            var authorizeOrderResponse = await payPalHttpClient.AuthorizeOrder(accessToken!, createOrderResponse.Id);
 
-            Console.WriteLine("Status: {0}", authorizeOrderResponse.Status);
+            Console.WriteLine("Status: {0}", authorizeOrderResponse!.Status);
             var authorizationId = authorizeOrderResponse.PurchaseUnits[0].Payments.Authorizations[0].Id;
             Console.WriteLine("Order Id: {0}", authorizeOrderResponse.Id);
             Console.WriteLine("Authorization Id: {0}", authorizeOrderResponse.PurchaseUnits[0].Payments.Authorizations[0].Id);
@@ -48,11 +48,12 @@ namespace PayPal.Sdk.Checkout.Samples.AuthorizeIntentExamples
             var authorizedAmount = authorizeOrderResponse.PurchaseUnits[0].AmountWithBreakdown;
             Console.WriteLine("Buyer:");
             Console.WriteLine("\tEmail Address: {0}", authorizeOrderResponse.Payer.Email);
+            Console.WriteLine("AuthorizedAmount: {0}", authorizedAmount);
 
             Console.WriteLine("Capturing the payment...");
-            var captureOrderResponse = await payPalHttpClient.CaptureOrder(accessToken, authorizationId);
+            var captureOrderResponse = await payPalHttpClient.CaptureOrder(accessToken!, authorizationId);
 
-            Console.WriteLine("Status: {0}", captureOrderResponse.Status);
+            Console.WriteLine("Status: {0}", captureOrderResponse!.Status);
             Console.WriteLine("Capture Id: {0}", captureOrderResponse.Id);
             Console.WriteLine("Links:");
             foreach (var link in captureOrderResponse.Links)
@@ -61,9 +62,9 @@ namespace PayPal.Sdk.Checkout.Samples.AuthorizeIntentExamples
             }
 
             Console.WriteLine("Refunding the Order....");
-            var refundOrderResponse = await payPalHttpClient.CapturesRefund(accessToken, captureOrderResponse.Id);
+            var refundOrderResponse = await payPalHttpClient.CapturesRefund(accessToken!, captureOrderResponse.Id);
 
-            Console.WriteLine("Status: {0}", refundOrderResponse.Status);
+            Console.WriteLine("Status: {0}", refundOrderResponse!.Status);
             Console.WriteLine("Refund Id: {0}", refundOrderResponse.Id);
             Console.WriteLine("Links:");
             foreach (var link in refundOrderResponse.Links)

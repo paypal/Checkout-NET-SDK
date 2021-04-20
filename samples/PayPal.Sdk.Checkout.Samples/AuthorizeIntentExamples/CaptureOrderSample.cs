@@ -1,10 +1,10 @@
 ﻿using PayPal.Sdk.Checkout.Authentication;
 using PayPal.Sdk.Checkout.ContractEnums;
-using PayPal.Sdk.Checkout.Core;
+using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Extensions;
+using PayPal.Sdk.Checkout.Payments;
 using System;
 using System.Threading.Tasks;
-using PayPal.Sdk.Checkout.Payments;
 
 namespace PayPal.Sdk.Checkout.Samples.AuthorizeIntentExamples
 {
@@ -13,7 +13,7 @@ namespace PayPal.Sdk.Checkout.Samples.AuthorizeIntentExamples
         /// <summary>
         /// This method can be used to capture the payment on the approved authorization.
         /// </summary>
-        public static async Task<Capture> CaptureOrder(this PayPalHttpClient httpClient, AccessToken accessToken, string authorizationId, bool debug = false)
+        public static async Task<Capture?> CaptureOrder(this IPayPalHttpClient httpClient, AccessToken accessToken, string authorizationId, bool debug = false)
         {
             var response = await httpClient.CapturePaymentAsync(
                 accessToken,

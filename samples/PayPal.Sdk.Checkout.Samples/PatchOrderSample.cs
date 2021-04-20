@@ -1,10 +1,10 @@
 ﻿using PayPal.Sdk.Checkout.Authentication;
-using PayPal.Sdk.Checkout.Core;
+using PayPal.Sdk.Checkout.Core.Interfaces;
 using PayPal.Sdk.Checkout.Extensions;
+using PayPal.Sdk.Checkout.Orders;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PayPal.Sdk.Checkout.Orders;
 
 namespace PayPal.Sdk.Checkout.Samples
 {
@@ -36,7 +36,7 @@ namespace PayPal.Sdk.Checkout.Samples
         /*
             This method cn be used to patch an order by passing the order id.
          */
-        public static async Task<Order> PatchOrder(this PayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
+        public static async Task<Order?> PatchOrder(this IPayPalHttpClient httpClient, AccessToken accessToken, string orderId, bool debug = false)
         {
             await httpClient.OrdersPatchRequestAsync(
                 accessToken,

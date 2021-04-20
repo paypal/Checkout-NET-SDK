@@ -1,23 +1,22 @@
 using PayPal.Sdk.Checkout.Extensions;
-using PayPal.Sdk.Checkout.Orders;
 using System;
 using System.Threading.Tasks;
 
 namespace PayPal.Sdk.Checkout.Samples.CaptureIntentExamples
 {
-    public class RunAll
+    public static class RunAll
     {
         //Rename to Main1 => Main
-        private static async Task Main1(string[] args)
+        private static async Task Main1()
         {
             var payPalHttpClient = PayPalClient.CreateHttpClient();
 
             var accessToken = await payPalHttpClient.AuthenticateAsync();
 
             Console.WriteLine("Running Capture Intent Flow..");
-            var createOrderResponse = await payPalHttpClient.CreateOrder(accessToken, true);
+            var createOrderResponse = await payPalHttpClient.CreateOrder(accessToken!, true);
 
-            Console.WriteLine("Status: {0}", createOrderResponse.Status);
+            Console.WriteLine("Status: {0}", createOrderResponse!.Status);
             Console.WriteLine("Order Id: {0}", createOrderResponse.Id);
             Console.WriteLine("Intent: {0}", createOrderResponse.CheckoutPaymentIntent);
             Console.WriteLine("Links:");
@@ -33,10 +32,10 @@ namespace PayPal.Sdk.Checkout.Samples.CaptureIntentExamples
             Console.Read();
 
             Console.WriteLine("Capturing the payment...");
-            var captureOrderResponse = await payPalHttpClient.CaptureOrder(accessToken, createOrderResponse.Id, true);
+            var captureOrderResponse = await payPalHttpClient.CaptureOrder(accessToken!, createOrderResponse.Id, true);
 
             var captureId = "";
-            Console.WriteLine("Status: {0}", captureOrderResponse.Status);
+            Console.WriteLine("Status: {0}", captureOrderResponse!.Status);
             Console.WriteLine("Order Id: {0}", captureOrderResponse.Id);
             Console.WriteLine("Intent: {0}", captureOrderResponse.CheckoutPaymentIntent);
             Console.WriteLine("Links:");
@@ -55,13 +54,12 @@ namespace PayPal.Sdk.Checkout.Samples.CaptureIntentExamples
 
             var captureAmount = captureOrderResponse.PurchaseUnits[0].AmountWithBreakdown;
             Console.WriteLine("Buyer:");
-            Console.WriteLine("\tEmail Address: {0}\n\tName: {1} {2}",
-                captureOrderResponse.Payer.Email, captureOrderResponse.Payer.Name.GivenName, captureOrderResponse.Payer.Name.Surname
-            );
+            Console.WriteLine("\tEmail Address: {0}\n\tName: {1} {2}", captureOrderResponse.Payer.Email, captureOrderResponse.Payer.Name.GivenName, captureOrderResponse.Payer.Name.Surname);
+            Console.WriteLine("CaptureAmount: {0}", captureAmount);
 
             Console.WriteLine("Refunding the Order....");
-            var refundOrderResponse = await payPalHttpClient.CapturesRefund(accessToken, captureId, true);
-            Console.WriteLine("Status: {0}", refundOrderResponse.Status);
+            var refundOrderResponse = await payPalHttpClient.CapturesRefund(accessToken!, captureId, true);
+            Console.WriteLine("Status: {0}", refundOrderResponse!.Status);
             Console.WriteLine("Refund Id: {0}", refundOrderResponse.Id);
             Console.WriteLine("Links:");
             foreach (var link in refundOrderResponse.Links)
