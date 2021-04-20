@@ -27,7 +27,7 @@ jobs:
       - name: build with .Net Core
         run: dotnet build --configuration Release
       - name: Pack with .Net Core
-        run: dotnet pack --configuration Release --output nuget-packages -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}.${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }}-nightly
+        run: dotnet pack --no-build --configuration Release --output nuget-packages -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}.${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }}-nightly
       - uses: actions/upload-artifact@v2
         with:
           name: Nuget-packages-${{ steps.gitversion.outputs.nuGetVersionV2 }}.${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }}-nightly

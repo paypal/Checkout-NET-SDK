@@ -22,10 +22,8 @@ jobs:
         with:
           dotnet-version: '5.0.x'
       - uses: actions/checkout@v2
-      - name: Build & test
-        run: |
-          dotnet build --configuration Release
-          dotnet test --nologo --no-build --configuration Release
+      - name: Build
+        run: dotnet build --configuration Release
 
   code-style:
     runs-on: ubuntu-latest
