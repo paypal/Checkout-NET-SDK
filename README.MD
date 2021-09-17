@@ -17,7 +17,7 @@ Please refer to the [PayPal Checkout Integration Guide](https://developer.paypal
 
 An environment which supports TLS 1.2 (see the TLS-update site for more information)
 
-PayPalHttp 1.0.0
+PayPalHttp 1.0.1
 
 ## Usage
 
