@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageVersion>1.0.3</PackageVersion>
+    <PackageVersion>1.0.4</PackageVersion>
     <Owners>PayPal</Owners>
     <PackageProjectUrl>https://github.com/paypal/Checkout-NET-SDK</PackageProjectUrl>
     <PackageReleaseNotes>Replaced BraintreeHttp with PayPalHttp</PackageReleaseNotes>
