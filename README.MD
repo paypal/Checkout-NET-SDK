@@ -2,7 +2,9 @@
 
 ![Home Image](homepage.jpg)
 
-__Welcome to PayPal Dotnet SDK__. This repository contains PayPal's Dotnet SDK and samples ffor [v2/checkout/orders](https://developer.paypal.com/docs/api/orders/v2/) and [v2/payments](https://developer.paypal.com/docs/api/payments/v2/) APIs.
+### To consolidate support across various channels, we have currently turned off the feature of GitHub issues. Please visit https://www.paypal.com/support to submit your request or ask questions within our community forum.
+
+__Welcome to PayPal Dotnet SDK__. This repository contains PayPal's Dotnet SDK and samples for [v2/checkout/orders](https://developer.paypal.com/docs/api/orders/v2/) and [v2/payments](https://developer.paypal.com/docs/api/payments/v2/) APIs.
 
 This is a part of the next major PayPal SDK. It includes a simplified interface to only provide simple model objects and blueprints for HTTP calls. This repo currently contains functionality for PayPal Checkout APIs which includes [Orders V2](https://developer.paypal.com/docs/api/orders/v2/) and [Payments V2](https://developer.paypal.com/docs/api/payments/v2/).
 
@@ -15,7 +17,7 @@ Please refer to the [PayPal Checkout Integration Guide](https://developer.paypal
 
 An environment which supports TLS 1.2 (see the TLS-update site for more information)
 
-PayPalHttp 1.0.0
+PayPalHttp 1.0.1
 
 ## Usage
 
@@ -64,7 +66,7 @@ public async static Task<HttpResponse> createOrder()
         // Construct a request object and set desired parameters
         // Here, OrdersCreateRequest() creates a POST request to /v2/checkout/orders
         var order = new OrderRequest() {
-                Intent = "CAPTURE",
+                CheckoutPaymentIntent = "CAPTURE",
                 PurchaseUnits = new List<PurchaseUnitRequest>()
                 {
                     new PurchaseUnitRequest()
@@ -132,7 +134,7 @@ You may use the client id and secret above for demonstration purposes.
 
 ## Samples
 
-You can start off by trying out [creating and capturing an order](/Samples/CaptureIntentExamples/RunAll.java).
+You can start off by trying out [creating and capturing an order](/Samples/CaptureIntentExamples/RunAllCaptureIntentFlow.cs).
 
 To try out different samples for both create and authorize intent head to [this link](/Samples).
 
