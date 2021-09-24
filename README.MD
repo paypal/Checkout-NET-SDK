@@ -71,7 +71,7 @@ public async static Task<HttpResponse> createOrder()
                 {
                     new PurchaseUnitRequest()
                     {
-                        Amount = new AmountWithBreakdown()
+                        AmountWithBreakdown = new AmountWithBreakdown()
                         {
                             CurrencyCode = "USD",
                             Value = "100.00"
@@ -95,7 +95,7 @@ public async static Task<HttpResponse> createOrder()
             Order result = response.Result<Order>();
             Console.WriteLine("Status: {0}", result.Status);
             Console.WriteLine("Order Id: {0}", result.Id);
-            Console.WriteLine("Intent: {0}", result.Intent);
+            Console.WriteLine("Intent: {0}", result.CheckoutPaymentIntent);
             Console.WriteLine("Links:");
             foreach (LinkDescription link in result.Links)
             {
