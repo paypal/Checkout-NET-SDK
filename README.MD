@@ -1,5 +1,5 @@
 ﻿# Deprecation Notice:
-This SDK is deprecated. You can continue to use it, but no new features or support requests will be accepted. For alternatives, please visit the [REST APIs documentation on the PayPal Developer Portal](https://developer.paypal.com/api/rest/).
+This SDK is deprecated. You can continue to use it, but no new features or support requests will be accepted. For alternatives, please visit the [REST APIs documentation on the PayPal Developer Portal](https://developer.paypal.com/docs/api/orders/v2/).
 
 ## REST API SDK for Dotnet V2
 
